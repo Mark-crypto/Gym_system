@@ -10,11 +10,28 @@ const PORT = process.env.PORT || 3001;
 app.get("/login", (req, res) => {
   res.send("General login");
 });
+app.post("/login", (req, res) => {
+  res.send("Login successful");
+});
+//logout
+app.get("/logout", (req, res) => {
+  res.send("Logout successful");
+});
+//Registration
+app.get("/registration", (req, res) => {
+  res.send("Register new user");
+});
+app.post("/registration", (req, res) => {
+  res.send("Registration successful");
+});
 //Admin management
 //admin dashboard
 app.get("/dashboard", (req, res) => {
   res.send("Admin dashboard");
 });
+//add new user
+//edit
+//delete
 //reports
 app.get("/reports", (req, res) => {
   res.send("System reports");
@@ -31,6 +48,9 @@ app.get("/profile", (req, res) => {
 //Feedback
 app.get("/feedback", (req, res) => {
   res.send("User feedback");
+});
+app.post("/feedback", (req, res) => {
+  res.send("Sent successful");
 });
 app.listen(PORT, () => {
   console.log(`The server is listening on port ${PORT}`);
