@@ -5,6 +5,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+//Middlewares
+app.use(express.json());
 //email confirmation
 //login
 app.get("/login", (req, res) => {
@@ -30,8 +32,17 @@ app.get("/dashboard", (req, res) => {
   res.send("Admin dashboard");
 });
 //add new user
+app.post("/dashboard", (req, res) => {
+  res.send("added successfully");
+});
 //edit
+app.put("/dashboard", (req, res) => {
+  res.send("Record updated successfully");
+});
 //delete
+app.delete("/dashboard", (req, res) => {
+  res.send("Record deleted successfully");
+});
 //reports
 app.get("/reports", (req, res) => {
   res.send("System reports");
