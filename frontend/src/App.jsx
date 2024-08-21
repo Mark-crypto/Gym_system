@@ -1,11 +1,50 @@
-import { Login } from "./components/Login";
+import { createBrowserRouter } from "react-router-dom";
 
-function App() {
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
+import { Feedback } from "./pages/Feedback";
+import { Profile } from "./pages/Profile";
+import { Registration } from "./pages/Registration";
+import { Reports } from "./pages/Reports";
+import { ErrorBoundary } from "./pages/ErrorBoundary";
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/registration",
+    element: <Registration />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/feedback",
+    element: <Feedback />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/reports",
+    element: <Reports />,
+    errorElement: <ErrorBoundary />,
+  },
+]);
+
+export function App() {
   return (
     <>
-      <Login />
+      <Dashboard />
     </>
   );
 }
-
-export default App;
