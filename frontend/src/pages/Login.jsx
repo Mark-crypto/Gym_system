@@ -12,7 +12,7 @@ export const Login = () => {
         <h4>GYM BROS</h4>
         <label htmlFor="email">Email Address</label>
         <br />
-        <input type="text" name="email" id="email" onChange={handleInput} />
+        <input type="email" name="email" id="email" onChange={handleInput} />
         <br />
         <label htmlFor="password">Password</label>
         <br />

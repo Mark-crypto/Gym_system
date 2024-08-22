@@ -1,5 +1,11 @@
 import React from "react";
 
 export const Profile = () => {
-  return <div>Profile</div>;
+  return (
+    <>
+      <table>
+        <h4>Profile</h4>
+      </table>
+    </>
+  );
 };
