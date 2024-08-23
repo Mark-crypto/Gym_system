@@ -18,6 +18,8 @@ export const Registration = () => {
         <input type="text" name="lname" id="lname" onChange={handleInput} />
         <label htmlFor="email">Email Address</label>
         <input type="email" name="email" id="email" onChange={handleInput} />
+        <label htmlFor="phone">Phone Number</label>
+        <input type="text" name="phone" id="phone" onChange={handleInput} />
         <label htmlFor="password">Password</label>
         <input
           type="password"
