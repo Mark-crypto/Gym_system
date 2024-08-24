@@ -11,49 +11,38 @@ export const Login = () => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit} className="login-form">
+      <div className="login-form">
         <h4>GYM BROS</h4>
-        <label htmlFor="email">Email Address</label>
-        <br />
-        <input type="email" name="email" id="email" onChange={handleInput} />
-        <br />
-        <label htmlFor="password">Password</label>
-        <br />
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={handleInput}
-        />{" "}
-        <br />
-        <button type="submit" className="login-btn">
-          Login
-        </button>{" "}
-        <br />
-        <p className="login-text">
-          Don't have an account? <a href="">Sign up</a>
-        </p>
-      </form>
-
-      <div>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" />
+            <Form.Label htmlFor="email">Email address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              name="email"
+              id="email"
+              onChange={handleInput}
+            />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
+            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              name="password"
+              id="password"
+              onChange={handleInput}
+            />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
+          <p className="login-text">
+            Don't have an account? <a href="">Sign up</a>
+          </p>
           <Button variant="primary" type="submit">
-            Submit
+            Login
           </Button>
         </Form>
       </div>
