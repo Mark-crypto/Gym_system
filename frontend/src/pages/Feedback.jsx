@@ -14,6 +14,16 @@ export const Feedback = () => {
       <div>
         <h4>Feedback Form</h4>
         <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label htmlFor="name">Full Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Full name"
+              name="name"
+              id="name"
+              onChange={handleInput}
+            />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label htmlFor="email">Email address</Form.Label>
             <Form.Control
