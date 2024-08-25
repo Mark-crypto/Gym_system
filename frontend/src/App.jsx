@@ -7,6 +7,7 @@ import { Profile } from "./pages/Profile";
 import { Registration } from "./pages/Registration";
 import { Reports } from "./pages/Reports";
 import { ErrorBoundary } from "./pages/ErrorBoundary";
+import { Loading } from "./components/Loading";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ export function App() {
   return (
     <>
       <Dashboard />
+      <Loading />
     </>
   );
 }

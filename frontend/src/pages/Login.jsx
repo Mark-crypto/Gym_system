@@ -1,5 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import "./login.css";
+import gym from "../assets/fitness-equipment.jpg";
 
 export const Login = () => {
   const handleSubmit = (e) => {
@@ -12,8 +14,13 @@ export const Login = () => {
   return (
     <>
       <div className="login-form">
-        <h4>GYM BROS</h4>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="login">
+          <p className="login-text">
+            Ready to transform your health? Join our state-of-the-art gym and
+            discover a supportive community focused on your success! Start your
+            journey to a healthier, stronger you today—sign up now and see the
+            difference!
+          </p>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label htmlFor="email">Email address</Form.Label>
             <Form.Control
@@ -39,12 +46,24 @@ export const Login = () => {
             />
           </Form.Group>
           <p className="login-text">
-            Don't have an account? <a href="">Sign up</a>
+            Don't have an account?{" "}
+            <a
+              href="/registration"
+              style={{ textDecoration: "none", fontWeight: "bold" }}
+            >
+              Sign up
+            </a>
           </p>
-          <Button variant="primary" type="submit">
-            Login
+          <Button variant="primary" type="submit" className="login-btn">
+            <b>Login</b>
           </Button>
         </Form>
+        <img
+          src={gym}
+          alt="fitness equipment"
+          style={{ width: "300px" }}
+          className="login-img"
+        />
       </div>
     </>
   );
