@@ -27,7 +27,7 @@ export const LineGraph = () => {
   }
   return (
     <>
-      <div id="curve_chart" style={{ width: "900px", height: "500px" }}></div>
+      <div id="curve_chart" style={{ width: "700px", height: "400px" }}></div>
     </>
   );
 };

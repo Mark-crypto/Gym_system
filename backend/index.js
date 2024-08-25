@@ -12,6 +12,7 @@ app.use(routes);
 
 //entry page
 app.get("/", (req, res) => {
+  res.cookie("user", "Mark", { maxAge: 60000 });
   res.send("Please login");
 });
 

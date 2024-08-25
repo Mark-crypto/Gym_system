@@ -1,9 +1,11 @@
 import { Router } from "express";
+import cookieParser from "cookie-parser";
 
 const router = Router();
 
 //admin dashboard
-router.get("/dashboard", (req, res) => {
+router.get("/dashboard", cookieParser(), (req, res) => {
+  console.log(req.cookies.user);
   res.send("Admin dashboard");
 });
 //add new user

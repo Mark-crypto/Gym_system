@@ -25,7 +25,7 @@ export const Donut = () => {
   }
   return (
     <>
-      <div id="donutchart" style={{ width: "900px", height: "500px" }}></div>
+      <div id="donutchart" style={{ width: "500px", height: "300px" }}></div>
     </>
   );
 };
