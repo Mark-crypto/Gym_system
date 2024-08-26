@@ -1,13 +1,23 @@
 import React from "react";
 import loading from "../assets/Loading.gif";
+import "../index.css";
 
 export const Loading = () => {
   return (
     <>
-      <div>
+      <div className="loading">
         <img src={loading} alt="loading..." />
-        <h4>Loading</h4>
       </div>
+      <h4
+        style={{
+          textAlign: "center",
+          marginTop: "10px",
+          fontSize: "30px",
+          color: "orange",
+        }}
+      >
+        Loading...
+      </h4>
     </>
   );
 };

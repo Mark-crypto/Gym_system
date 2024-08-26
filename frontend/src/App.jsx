@@ -7,7 +7,7 @@ import { Profile } from "./pages/Profile";
 import { Registration } from "./pages/Registration";
 import { Reports } from "./pages/Reports";
 import { ErrorBoundary } from "./pages/ErrorBoundary";
-import { Loading } from "./components/Loading";
+// import { Loading } from "./components/Loading";
 
 export const router = createBrowserRouter([
   {
@@ -40,13 +40,17 @@ export const router = createBrowserRouter([
     element: <Reports />,
     errorElement: <ErrorBoundary />,
   },
+  {
+    path: "*",
+    element: <ErrorBoundary />,
+  },
 ]);
 
 export function App() {
   return (
     <>
       <Dashboard />
-      <Loading />
+      {/* <Loading /> */}
     </>
   );
 }

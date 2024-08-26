@@ -1,5 +1,6 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import "./registration.css";
 
 export const Registration = () => {
   const handleSubmit = (e) => {
@@ -11,8 +12,17 @@ export const Registration = () => {
   };
   return (
     <>
-      <div className="login-form">
-        <h4>Registration</h4>
+      <div className="registration-form">
+        <h4
+          style={{
+            textAlign: "center",
+            color: "blue",
+            fontSize: "bold",
+            textTransform: "uppercase",
+          }}
+        >
+          Registration
+        </h4>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label htmlFor="fname">First Name</Form.Label>
@@ -80,10 +90,10 @@ export const Registration = () => {
             />
           </Form.Group>
           <p className="login-text">
-            Have an account already? <a href="">Login</a>
+            Have an account already? <a href="/login">Login</a>
           </p>
-          <Button variant="primary" type="submit">
-            Login
+          <Button variant="primary" type="submit" className="registration-btn">
+            <b> Login</b>
           </Button>
         </Form>
       </div>
