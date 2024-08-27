@@ -1,9 +1,15 @@
-.registration-form {
+.registration-form,
+.feedback-form {
   border: 1px solid grey;
   margin: 60px 200px 20px 200px;
   padding: 20px 20px 20px 20px;
   border-radius: 10px;
 }
-.registration-btn {
+.registration-btn,
+.feedback-btn {
   width: 820px;
+}
+.message {
+  width: 820px;
+  height: 100px;
 }

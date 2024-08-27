@@ -17,7 +17,7 @@ export const Registration = () => {
           style={{
             textAlign: "center",
             color: "blue",
-            fontSize: "bold",
+            fontWeight: "bold",
             textTransform: "uppercase",
           }}
         >

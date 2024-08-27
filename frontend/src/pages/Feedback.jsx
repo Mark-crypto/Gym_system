@@ -1,5 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import "./registration.css";
+import { UserNav } from "../components/UserNav";
 
 export const Feedback = () => {
   const handleSubmit = (e) => {
@@ -11,9 +13,19 @@ export const Feedback = () => {
   };
   return (
     <>
+      <UserNav />
       <div>
-        <h4>Feedback Form</h4>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="feedback-form">
+          <h4
+            style={{
+              textAlign: "center",
+              color: "blue",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
+          >
+            Feedback Form
+          </h4>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label htmlFor="name">Full Name</Form.Label>
             <Form.Control
@@ -57,10 +69,11 @@ export const Feedback = () => {
               cols="30"
               rows="10"
               onChange={handleInput}
+              className="message"
             />
             <br />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" className="feedback-btn">
             Submit
           </Button>
         </Form>
