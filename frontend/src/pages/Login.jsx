@@ -2,14 +2,25 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./login.css";
 import gym from "../assets/fitness-equipment.jpg";
+import { useState } from "react";
 
 export const Login = () => {
+  const [login, setLogin] = useState({
+    email: "",
+    password: "",
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { email, password } = login;
+    if (!email || !password) return;
+    const loginData = login;
+    //handle error
     console.log("Form submitted");
+    //clear form
+    setLogin({});
   };
   const handleInput = (e) => {
-    console.log(e.target.value);
+    setLogin({ ...login, [e.target.name]: e.target.value });
   };
   return (
     <>
@@ -29,6 +40,7 @@ export const Login = () => {
               name="email"
               id="email"
               onChange={handleInput}
+              value={login.email}
             />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
@@ -43,6 +55,7 @@ export const Login = () => {
               name="password"
               id="password"
               onChange={handleInput}
+              value={login.password}
             />
           </Form.Group>
           <p className="login-text">
