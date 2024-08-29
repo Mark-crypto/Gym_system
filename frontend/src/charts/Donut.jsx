@@ -5,16 +5,23 @@ export const Donut = () => {
   google.charts.setOnLoadCallback(drawChart);
   function drawChart() {
     var data = google.visualization.arrayToDataTable([
-      ["Task", "Hours per Day"],
-      ["Work", 11],
-      ["Eat", 2],
-      ["Commute", 2],
-      ["Watch TV", 2],
-      ["Sleep", 7],
+      ["Month", "Membership"],
+      ["January", 50],
+      ["February", 43],
+      ["March", 43],
+      ["April TV", 37],
+      ["May", 54],
+      ["June", 29],
+      ["July", 30],
+      ["August", 39],
+      ["September", 47],
+      ["October", 38],
+      ["November", 33],
+      ["December", 20],
     ]);
 
     var options = {
-      title: "My Daily Activities",
+      title: "Membership distribution (2023-2024)",
       pieHole: 0.4,
     };
 
@@ -25,7 +32,7 @@ export const Donut = () => {
   }
   return (
     <>
-      <div id="donutchart" style={{ width: "500px", height: "300px" }}></div>
+      <div id="donutchart" style={{ width: "600px", height: "400px" }}></div>
     </>
   );
 };

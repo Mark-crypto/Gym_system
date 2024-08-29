@@ -41,7 +41,7 @@ export const BarChart2 = () => {
     <>
       <div
         id="barchart_values"
-        style={{ width: "400px", height: "400px" }}
+        style={{ width: "300px", height: "400px" }}
       ></div>
     </>
   );

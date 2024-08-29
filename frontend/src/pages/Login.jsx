@@ -2,22 +2,47 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./login.css";
 import gym from "../assets/fitness-equipment.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import bcrypt from "bcryptjs";
 
 export const Login = () => {
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
+  useEffect(() => {
+    const getData = async () => {
+      const results = await fetch("http://localhost:3000/api");
+      const resultsJson = await results.json();
+      console.log(resultsJson);
+    };
+    getData();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = login;
     if (!email || !password) return;
-    const loginData = login;
+    //const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const submitForm = async () => {
+      //setLogin({ ...login, password: hashedPassword });
+      const loginData = { ...login, password: hashedPassword };
+      const response = await fetch("http://localhost:3000/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+      const responseJson = await response.json();
+      console.log(responseJson);
+    };
+    submitForm();
     //handle error
     console.log("Form submitted");
     //clear form
-    setLogin({});
+    //setLogin({});
   };
   const handleInput = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });

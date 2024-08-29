@@ -3,6 +3,7 @@ import { Donut } from "../charts/Donut";
 import { BarChart } from "../charts/BarChart";
 import { BarChart2 } from "../charts/BarChart2";
 import { AdminNav } from "../components/AdminNav";
+import Table from "react-bootstrap/Table";
 import "./reports.css";
 
 export const Reports = () => {
@@ -36,28 +37,33 @@ export const Reports = () => {
         <LineGraph />
         <Donut />
       </div>
-      <div className="bottom-elements">
+      {/* <div className="bottom-elements">
         <div className="first-lot">
           <BarChart />
+        </div>
+        <div className="middle-lot">
           <BarChart2 />
         </div>
-        <div className="last-lot">
-          <h4>Employees Perfomance</h4>
-          <table>
-            <th>
-              <td>#</td>
-              <td>Employee</td>
-              <td>Performance</td>
-            </th>
-            <tr>
-              <td>1</td>
-              <td>John Doe</td>
-              <td>90%</td>
-            </tr>
-          </table>
-        </div>
       </div>
-      <p>memberships to month</p>
+      <div className="last-lot">
+        <Table hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Employee</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ color: "black", fontWeight: "bold" }}>1</td>
+              <td style={{ color: "red", fontWeight: "bold" }}>Mark Juma</td>
+              <td style={{ color: "green", fontWeight: "bold" }}>90%</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div> */}
+      {/* <p>memberships to month</p>
       <p>service to demand</p>
       <p>revenue to month</p>
       <p>revenue to service</p>
@@ -65,7 +71,7 @@ export const Reports = () => {
       <p>Side: Memberships to month (donut chart)</p>
       <p>Below: Service to demand (bar graph)</p>
       <p>Below: revenue to service(bar graph)</p>
-      <p>Side: Employees performance</p>
+      <p>Side: Employees performance</p> */}
     </>
   );
 };

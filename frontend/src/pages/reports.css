@@ -7,6 +7,8 @@
   display: flex;
   justify-content: space-around;
   margin: 40px 0px 20px 0px;
+  background: #e8e8e8;
+  padding: 20px;
 }
 .element-1,
 .element-2,
@@ -22,17 +24,16 @@
   border-radius: 10px;
 }
 .middle-elements {
-  margin: 60px 0px 20px 0px;
   display: flex;
-  justify-content: space-between;
+  margin: 60px 0px 60px 0px;
+  gap: 65px;
 }
 .bottom-elements {
   display: flex;
-  justify-content: space-between;
+  margin: 60px 0px 60px 0px;
+  gap: 65px;
 }
-.first-lot {
-  display: flex;
-}
+
 .last-lot {
   background: #e8e8e8;
 }
