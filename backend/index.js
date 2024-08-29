@@ -21,12 +21,8 @@ app.get("/", (req, res) => {
   res.cookie("user", "Mark", { maxAge: 60000 });
   res.send("Please login");
 });
-app.get("/api", (req, res) => {
-  res.send(students);
-});
-app.post("/api", (req, res) => {
-  console.log(req.body);
-  console.log("received");
+app.delete("/delete", (req, res) => {
+  res.send({ message: "user deleted" });
 });
 app.listen(PORT, () => {
   console.log(`The server is listening on port ${PORT}`);

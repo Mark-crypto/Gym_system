@@ -1,20 +1,21 @@
-import React from "react";
 import Table from "react-bootstrap/Table";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { AdminNav } from "../components/AdminNav";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import bcrypt from "bcryptjs";
 
 export const Dashboard = () => {
   const [users, setUsers] = useState({});
-  const [feedback, setFeedback] = useState({});
   const [show, setShow] = useState(false);
   const [add, setAdd] = useState(false);
+  const [del, setDel] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const confirmRef = useRef("");
 
   const [registration, setRegistration] = useState({
     fname: "",
@@ -24,24 +25,28 @@ export const Dashboard = () => {
     number: "",
     packages: "",
     password: "",
-    confirmPassword: "",
   });
+  //Handling submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { fname, lname, email, number, packages, password, confirmPassword } =
-      registration;
-    if (
-      !fname ||
-      !lname ||
-      !email ||
-      !number ||
-      !packages ||
-      !password ||
-      !confirmPassword
-    )
-      return;
+    const { fname, lname, email, number, packages, password } = registration;
+    if (!fname || !lname || !email || !number || !packages || !password) return;
+    const confirmPassword = confirmRef.current.confirmPassword;
     if (password !== confirmPassword) return;
-    const registrationData = registration;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const submitForm = async () => {
+      const registrationData = { ...registration, password: hashedPassword };
+      const results = await fetch("http://localhost:3000/registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registrationData),
+      });
+      const responseJson = await results.json();
+      console.log(responseJson);
+    };
+    submitForm();
     console.log("Form submitted");
     setRegistration({});
   };
@@ -49,17 +54,25 @@ export const Dashboard = () => {
     setRegistration({ ...registration, [e.target.name]: e.target.value });
   };
   const handleDelete = () => {
-    let answer = window.confirm("Are you sure you want to delete?");
-    if (answer) {
+    if (del) {
+      const deleteData = async () => {
+        const results = await fetch("http://localhost:3000/delete", {
+          method: "DELETE",
+        });
+        const responseJson = await results.json();
+        console.log(responseJson);
+      };
+      setDel(false);
+      deleteData();
       console.log("deleted");
-    } else {
-      location.reload();
-      alert("You have cancelled delete operation");
     }
   };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleShowDel = () => setDel(true);
+  const handleCloseDel = () => setDel(false);
 
   const handleOpen = () => setAdd(true);
   const handleHide = () => setAdd(false);
@@ -100,30 +113,107 @@ export const Dashboard = () => {
               <button className="btn btn-primary" onClick={handleShow}>
                 <FaRegEdit />
               </button>
-              <button className="btn btn-danger" onClick={handleDelete}>
+              <button className="btn btn-danger" onClick={handleShowDel}>
                 <RiDeleteBin6Line />
               </button>
             </td>
           </tr>
         </tbody>
       </Table>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={del} onHide={handleCloseDel}>
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+        <Modal.Body>Are you sure you want to delete?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCloseDel}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label htmlFor="fname">First Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter first name"
+                name="fname"
+                id="fname"
+                onChange={handleInput}
+                value={registration.fname}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label htmlFor="lname">Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter last name"
+                name="lname"
+                id="lname"
+                onChange={handleInput}
+                value={registration.lname}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label htmlFor="email">Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                name="email"
+                id="email"
+                onChange={handleInput}
+                value={registration.email}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label htmlFor="number">Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter phone number"
+                name="number"
+                id="number"
+                onChange={handleInput}
+                value={registration.number}
+              />
+            </Form.Group>
+            <Form.Label htmlFor="packages">Select Package:</Form.Label>
+            <Form.Select
+              aria-label="Default select example"
+              name="packages"
+              value={registration.packages}
+              onChange={handleInput}
+              id="packages"
+            >
+              <option value="weightLifting">Weight Lifting</option>
+              <option value="aerobics">Aerobics</option>
+              <option value="zumba">Zumba</option>
+              <option value="karate">Karate</option>
+              <option value="boxing">Boxing</option>
+            </Form.Select>
+
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              style={{ marginTop: "20px", width: "100%" }}
+            >
+              <b> Edit</b>
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
       <Modal show={add} onHide={handleHide}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Add User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -171,12 +261,9 @@ export const Dashboard = () => {
                 onChange={handleInput}
                 value={registration.email}
               />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="number">
               <Form.Label htmlFor="number">Phone Number</Form.Label>
               <Form.Control
                 type="text"
@@ -223,25 +310,18 @@ export const Dashboard = () => {
                 name="confirmPassword"
                 id="confirmPassword"
                 onChange={handleInput}
-                value={registration.confirmPassword}
+                ref={confirmRef}
               />
             </Form.Group>
-            <p className="login-text">
-              Have an account already? <a href="/login">Login</a>
-            </p>
-            <Button variant="primary" type="submit">
-              <b> Register</b>
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              style={{ marginTop: "20px", width: "100%" }}
+            >
+              <b> Add User</b>
             </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleHide}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleHide}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

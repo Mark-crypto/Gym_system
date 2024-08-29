@@ -16,6 +16,7 @@ router.get("/registration", (req, res) => {
   res.send("Register new user");
 });
 router.post("/registration", (req, res) => {
+  console.log(req.body);
   res.send("Registration successful");
 });
 
