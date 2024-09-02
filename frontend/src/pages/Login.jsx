@@ -2,8 +2,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./login.css";
 import gym from "../assets/fitness-equipment.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
+import { LoginValidation } from "../Schemas/LoginValidation";
+import { useFormik } from "formik";
 
 export const Login = () => {
   //Set state for login
@@ -13,33 +15,59 @@ export const Login = () => {
   });
   //Set state for error
   const [error, setError] = useState(false);
-  //Working on submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = login;
-    if (!email || !password) return;
-    //Hashing our password
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const submitForm = async () => {
-      const loginData = { ...login, password: hashedPassword };
-      const response = await fetch("http://localhost:3000/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
+  useEffect(() => {
+    const checkLogin = async () => {
+      const response = await fetch("http://localhost:3000/login");
       const responseJson = await response.json();
-      console.log(responseJson);
+      const allowUser = await bcrypt.compare(
+        login.password,
+        responseJson.password
+      );
+      if (allowUser) {
+        console.log("User allowed");
+      } else {
+        setError(true);
+      }
     };
-    submitForm();
-    //clear form
-    setLogin({});
-  };
+    checkLogin();
+  }, []);
+  //Working on submit
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const { email, password } = login;
+  //   if (!email || !password) return;
+  //   //Hashing our password
+  //   const hashedPassword = bcrypt.hashSync(password, 10);
+  //   const submitForm = async () => {
+  //     const loginData = { ...login, password: hashedPassword };
+  //     const response = await fetch("http://localhost:3000/api", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(loginData),
+  //     });
+  //     const responseJson = await response.json();
+  //     console.log(responseJson);
+  //   };
+  //   submitForm();
+  //   //clear form
+  //   setLogin({});
+  // };
   //Handling input
   const handleInput = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
+  const { errors, handleSubmit, values, handleChange } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: LoginValidation,
+    onSubmit: () => {
+      console.log("Submitted");
+    },
+  });
   return (
     <>
       <div className="login-form">
@@ -57,9 +85,10 @@ export const Login = () => {
               placeholder="Enter email"
               name="email"
               id="email"
-              onChange={handleInput}
-              value={login.email}
+              onChange={handleChange}
+              value={values.email}
             />
+            {errors.email && <small>{errors.email}</small>} <br />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
@@ -72,9 +101,10 @@ export const Login = () => {
               placeholder="Password"
               name="password"
               id="password"
-              onChange={handleInput}
-              value={login.password}
+              onChange={handleChange}
+              value={values.password}
             />
+            {errors.password && <small>{errors.password}</small>}
           </Form.Group>
           <p className="login-text">
             Don't have an account?{" "}
