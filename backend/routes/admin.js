@@ -4,8 +4,7 @@ import cookieParser from "cookie-parser";
 const router = Router();
 
 //admin dashboard
-router.get("/dashboard", cookieParser(), (req, res) => {
-  console.log(req.cookies.user);
+router.get("/dashboard", (req, res) => {
   res.send("Admin dashboard");
 });
 //add new user

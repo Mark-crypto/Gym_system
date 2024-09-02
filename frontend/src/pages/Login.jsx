@@ -5,69 +5,51 @@ import gym from "../assets/fitness-equipment.jpg";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 import { LoginValidation } from "../Schemas/LoginValidation";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { useFormik } from "formik";
 
 export const Login = () => {
-  //Set state for login
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
   //Set state for error
   const [error, setError] = useState(false);
-  useEffect(() => {
-    const checkLogin = async () => {
-      const response = await fetch("http://localhost:3000/login");
-      const responseJson = await response.json();
-      const allowUser = await bcrypt.compare(
-        login.password,
-        responseJson.password
-      );
-      if (allowUser) {
-        console.log("User allowed");
-      } else {
-        setError(true);
-      }
-    };
-    checkLogin();
-  }, []);
-  //Working on submit
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const { email, password } = login;
-  //   if (!email || !password) return;
-  //   //Hashing our password
-  //   const hashedPassword = bcrypt.hashSync(password, 10);
-  //   const submitForm = async () => {
-  //     const loginData = { ...login, password: hashedPassword };
-  //     const response = await fetch("http://localhost:3000/api", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(loginData),
-  //     });
-  //     const responseJson = await response.json();
-  //     console.log(responseJson);
-  //   };
-  //   submitForm();
-  //   //clear form
-  //   setLogin({});
-  // };
-  //Handling input
-  const handleInput = (e) => {
+  const handleChange = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
-  const { errors, handleSubmit, values, handleChange } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: LoginValidation,
-    onSubmit: () => {
-      console.log("Submitted");
-    },
-  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = login;
+    if (!email || !password) return;
+    //Hashing our password
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const submitForm = async () => {
+      const loginData = { ...login, password: hashedPassword };
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+      const responseJson = await response.json();
+      console.log(responseJson);
+    };
+    submitForm();
+    //clear form
+    setLogin({});
+  };
+
+  //Check for errors
+  if (error) {
+    return (
+      <>
+        <ErrorBoundary />
+      </>
+    );
+  }
   return (
     <>
       <div className="login-form">
@@ -86,9 +68,12 @@ export const Login = () => {
               name="email"
               id="email"
               onChange={handleChange}
-              value={values.email}
+              value={login.email}
             />
-            {errors.email && <small>{errors.email}</small>} <br />
+            {/* {errors.email && (
+              <small style={{ color: "red" }}>{errors.email}</small>
+            )}{" "}
+            <br /> */}
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
@@ -102,9 +87,11 @@ export const Login = () => {
               name="password"
               id="password"
               onChange={handleChange}
-              value={values.password}
+              value={login.password}
             />
-            {errors.password && <small>{errors.password}</small>}
+            {/* {errors.password && (
+              <small style={{ color: "red" }}>{errors.password}</small>
+            )} */}
           </Form.Group>
           <p className="login-text">
             Don't have an account?{" "}
