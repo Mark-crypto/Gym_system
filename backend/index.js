@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import routes from "./routes/index.mjs";
 import cors from "cors";
+import { dbConnection } from "./dBconn.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,5 +26,6 @@ app.delete("/delete", (req, res) => {
   res.send({ message: "user deleted" });
 });
 app.listen(PORT, () => {
+  dbConnection();
   console.log(`The server is listening on port ${PORT}`);
 });

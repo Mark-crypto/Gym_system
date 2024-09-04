@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./registration.css";
 import { UserNav } from "../components/UserNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Feedback = () => {
   const [feedback, setFeedback] = useState({
@@ -11,6 +11,7 @@ export const Feedback = () => {
     number: "",
     message: "",
   });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, number, message } = feedback;

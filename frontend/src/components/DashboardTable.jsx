@@ -4,8 +4,13 @@ import Table from "react-bootstrap/Table";
 import { DeleteModal } from "./DeleteModal";
 import { useState } from "react";
 import { EditModal } from "./EditModal";
+import { useFetch } from "../customHooks/useFetch.js";
+import { Loading } from "./Loading.jsx";
+import { ErrorBoundary } from "../pages/ErrorBoundary.jsx";
 
 export const DashboardTable = () => {
+  //const url = "http://localhost:3000/";
+  //const { isLoading, isError } = useFetch(url);
   const [del, setDel] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -28,6 +33,22 @@ export const DashboardTable = () => {
       console.log("deleted");
     }
   };
+
+  // if (isLoading) {
+  //   return (
+  //     <>
+  //       {" "}
+  //       <Loading />{" "}
+  //     </>
+  //   );
+  // }
+  // if (isError) {
+  //   return (
+  //     <>
+  //       <ErrorBoundary />
+  //     </>
+  //   );
+  // }
   return (
     <>
       <Table hover>
@@ -46,15 +67,29 @@ export const DashboardTable = () => {
         <tbody>
           <tr>
             <td style={{ color: "black", fontWeight: "bold" }}>1</td>
-            <td style={{ color: "red", fontWeight: "bold" }}>Mark</td>
-            <td style={{ color: "red", fontWeight: "bold" }}>Otto</td>
-            <td style={{ color: "blue", fontWeight: "bold" }}>
-              otto@gmail.com
+            <td style={{ color: "red", fontWeight: "bold" }}>
+              {/* {data.fname || "Mark"} */}
+              Mark
             </td>
-            <td style={{ color: "orange", fontWeight: "bold" }}>25412345678</td>
-            <td style={{ color: "green", fontWeight: "bold" }}>Active</td>
+            <td style={{ color: "red", fontWeight: "bold" }}>
+              {/* {data.lname || "Otto"} */}
+              Otto
+            </td>
+            <td style={{ color: "blue", fontWeight: "bold" }}>
+              {/* {data.email || "test@test.com"} */}
+              test@test.com
+            </td>
+            <td style={{ color: "orange", fontWeight: "bold" }}>
+              {/* {data.number || "0712345678"} */}
+              0712345678
+            </td>
             <td style={{ color: "green", fontWeight: "bold" }}>
-              Weight Lifting
+              {/* {data.status || "active"} */}
+              active
+            </td>
+            <td style={{ color: "green", fontWeight: "bold" }}>
+              {/* {data.package || "Weight lifting"} */}
+              weight lifting
             </td>
             <td>
               <button className="btn btn-primary" onClick={handleShow}>
