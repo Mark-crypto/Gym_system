@@ -22,14 +22,31 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    profilePhoto: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dv1aih4ps/image/upload/v1633123045/Profile%20Photos/blank-profile-picture-973460_640",
+    },
     role: {
       type: String,
       default: "user",
     },
     status: {
       type: String,
-      required: true,
+      default: "active",
     },
+    lastLogin: {
+      type: Date,
+      default: Date.now(),
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpiresAt: Date,
+    verificationToken: String,
+    verificationTokenExpiresAt: Date,
   },
   {
     timestamps: true,

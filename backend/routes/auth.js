@@ -1,41 +1,14 @@
 import { Router } from "express";
-import bcrypt from "bcryptjs";
+
+import { login, logout, registration } from "../controllers/userController";
 
 const router = Router();
 
 //login
-router.get("/login", (req, res) => {
-  res.send({ email: "test@test.com", password: "12345678" });
-});
-router.post("/login", (req, res) => {
-  const testData = {
-    email: "test@test.com",
-    password: "12345678",
-  };
-  console.log(req.body);
-  const { email, password } = req.body;
-  if (email == testData.email) {
-    const allowed = bcrypt.compareSync(testData.password, password);
-    if (allowed) {
-      return res.send({ message: "Successful login" });
-    } else {
-      return res.send({ message: "Enter correct password" });
-    }
-  } else {
-    return res.send({ message: "Enter correct email/username" });
-  }
-});
+router.post("/login", login);
 //logout
-router.get("/logout", (req, res) => {
-  res.send("Logout successful");
-});
+router.get("/logout", logout);
 //Registration
-router.get("/registration", (req, res) => {
-  res.send("Register new user");
-});
-router.post("/registration", (req, res) => {
-  console.log(req.body);
-  res.send("Registration successful");
-});
+router.post("/registration", registration);
 
 export default router;
