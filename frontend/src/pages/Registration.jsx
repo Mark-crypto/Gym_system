@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./registration.css";
 import { useState } from "react";
+import bcrypt from "bcryptjs";
 
 export const Registration = () => {
   const [registration, setRegistration] = useState({
@@ -29,9 +30,24 @@ export const Registration = () => {
     )
       return;
     if (password !== confirmPassword) return;
-    const registrationData = registration;
-    console.log("Form submitted");
-    setRegistration({});
+    const hashedPassword = bcrypt.hash(password, 10);
+    const registrationData = { ...registration, password: hashedPassword };
+    //change to use axios for better error handling
+    const submitForm = async () => {
+      const registrationData = { ...registration, password: hashedPassword };
+      const results = await fetch("http://localhost:3000/registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registrationData),
+      });
+      const responseJson = await results.json();
+      console.log(responseJson);
+    };
+    //submitForm();
+    console.log(registrationData);
+    setRegistration([]);
   };
   const handleInput = (e) => {
     setRegistration({ ...registration, [e.target.name]: e.target.value });
@@ -50,7 +66,7 @@ export const Registration = () => {
           Registration
         </h4>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="fname">First Name</Form.Label>
             <Form.Control
               type="text"
@@ -61,7 +77,7 @@ export const Registration = () => {
               value={registration.fname}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="lname">Last Name</Form.Label>
             <Form.Control
               type="text"
@@ -72,7 +88,7 @@ export const Registration = () => {
               value={registration.lname}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
             <Form.Control
               type="file"
@@ -84,7 +100,7 @@ export const Registration = () => {
               value={registration.photo}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="email">Email address</Form.Label>
             <Form.Control
               type="email"
@@ -99,7 +115,7 @@ export const Registration = () => {
             </Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="number">Phone Number</Form.Label>
             <Form.Control
               type="text"
@@ -124,7 +140,7 @@ export const Registration = () => {
             <option value="karate">Karate</option>
             <option value="boxing">Boxing</option>
           </Form.Select>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="password">Password</Form.Label>
             <Form.Control
               type="password"
@@ -136,7 +152,7 @@ export const Registration = () => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="confirmPassword">Confirm Password</Form.Label>
             <Form.Control
               type="password"

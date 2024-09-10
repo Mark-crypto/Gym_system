@@ -54,14 +54,14 @@ export const DashboardTable = () => {
       <Table hover>
         <thead>
           <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Number</th>
-            <th>Status</th>
-            <th>Packages</th>
-            <th>Actions</th>
+            <th style={{ fontWeight: "bold" }}>#</th>
+            <th style={{ fontWeight: "bold" }}>First Name</th>
+            <th style={{ fontWeight: "bold" }}>Last Name</th>
+            <th style={{ fontWeight: "bold" }}>Email</th>
+            <th style={{ fontWeight: "bold" }}>Number</th>
+            <th style={{ fontWeight: "bold" }}>Status</th>
+            <th style={{ fontWeight: "bold" }}>Packages</th>
+            <th style={{ fontWeight: "bold" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -92,10 +92,19 @@ export const DashboardTable = () => {
               weight lifting
             </td>
             <td>
-              <button className="btn btn-primary" onClick={handleShow}>
+              <button
+                className="btn btn-primary"
+                onClick={handleShow}
+                style={{ width: "50px" }}
+              >
                 <FaRegEdit />
               </button>
-              <button className="btn btn-danger" onClick={handleShowDel}>
+              &nbsp;
+              <button
+                className="btn btn-danger"
+                onClick={handleShowDel}
+                style={{ width: "50px" }}
+              >
                 <RiDeleteBin6Line />
               </button>
             </td>

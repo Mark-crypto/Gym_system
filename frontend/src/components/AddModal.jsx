@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import bcrypt from "bcryptjs";
 
 export const AddModal = ({ add, setAdd }) => {
@@ -13,8 +13,8 @@ export const AddModal = ({ add, setAdd }) => {
     number: "",
     packages: "",
     password: "",
+    confirmPassword: "",
   });
-  const confirmRef = useRef("");
 
   const handleHide = () => setAdd(false);
 
@@ -24,11 +24,20 @@ export const AddModal = ({ add, setAdd }) => {
   //Handling submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { fname, lname, email, number, packages, password } = registration;
+    const {
+      fname,
+      lname,
+      email,
+      number,
+      packages,
+      confirmPassword,
+      image,
+      password,
+    } = registration;
     if (!fname || !lname || !email || !number || !packages || !password) return;
-    const confirmPassword = confirmRef.current.confirmPassword;
     if (password !== confirmPassword) return;
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = bcrypt.hash(password, 10);
+    //change to use axios for better error handling
     const submitForm = async () => {
       const registrationData = { ...registration, password: hashedPassword };
       const results = await fetch("http://localhost:3000/registration", {
@@ -41,7 +50,7 @@ export const AddModal = ({ add, setAdd }) => {
       const responseJson = await results.json();
       console.log(responseJson);
     };
-    submitForm();
+    //submitForm();
     console.log("Form submitted");
     setRegistration({});
   };
@@ -53,7 +62,7 @@ export const AddModal = ({ add, setAdd }) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="fname">First Name</Form.Label>
               <Form.Control
                 type="text"
@@ -64,7 +73,7 @@ export const AddModal = ({ add, setAdd }) => {
                 value={registration.fname}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="lname">Last Name</Form.Label>
               <Form.Control
                 type="text"
@@ -75,7 +84,7 @@ export const AddModal = ({ add, setAdd }) => {
                 value={registration.lname}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
               <Form.Control
                 type="file"
@@ -87,7 +96,7 @@ export const AddModal = ({ add, setAdd }) => {
                 value={registration.photo}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="email">Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -99,7 +108,7 @@ export const AddModal = ({ add, setAdd }) => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="number">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="number">Phone Number</Form.Label>
               <Form.Control
                 type="text"
@@ -124,7 +133,7 @@ export const AddModal = ({ add, setAdd }) => {
               <option value="karate">Karate</option>
               <option value="boxing">Boxing</option>
             </Form.Select>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="password">Password</Form.Label>
               <Form.Control
                 type="password"
@@ -136,7 +145,7 @@ export const AddModal = ({ add, setAdd }) => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="confirmPassword">
                 Confirm Password
               </Form.Label>
@@ -146,7 +155,7 @@ export const AddModal = ({ add, setAdd }) => {
                 name="confirmPassword"
                 id="confirmPassword"
                 onChange={handleInput}
-                ref={confirmRef}
+                value={registration.confirmPassword}
               />
             </Form.Group>
             <Button

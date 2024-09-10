@@ -13,9 +13,9 @@ export const logout = (req, res) => {
 };
 
 export const registration = async (req, res) => {
-  const { fname, lname, email, number, photo, password } = req.body;
+  const { fname, lname, email, number, photo, password, packages } = req.body;
   try {
-    if (!fname || !lname || !email || !number || !password) {
+    if (!fname || !lname || !email || !number || !password || !packages) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const userAlreadyExist = await User.findOne({ email });
@@ -30,8 +30,9 @@ export const registration = async (req, res) => {
       email,
       password: hashedPassword,
       profilePhoto: photo,
+      packages,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 6 * 60 * 60 * 1000,
+      verificationTokenExpiresAt: Date.now() + 6 * 60 * 60 * 1000, //6 days
     });
     await newUser.save();
     //JWT
@@ -44,5 +45,7 @@ export const registration = async (req, res) => {
         password: undefined,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };

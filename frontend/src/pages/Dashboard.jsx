@@ -2,21 +2,24 @@ import { useState } from "react";
 import { AdminNav } from "../components/AdminNav";
 import { AddModal } from "../components/AddModal";
 import { DashboardTable } from "../components/DashboardTable";
+import "../index.css";
+import { IoMdAddCircleOutline } from "react-icons/io";
 
 export const Dashboard = () => {
   const [add, setAdd] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
 
   const handleOpen = () => setAdd(true);
 
   return (
     <>
       <AdminNav />
-      <h4>Admin Dashboard</h4>
-      <button className="btn btn-primary" onClick={handleOpen}>
-        Add user
-      </button>
+      <div className="dashboard-btn">
+        <button className="btn btn-primary" onClick={handleOpen}>
+          <IoMdAddCircleOutline className="dashboard-icon" />
+          &nbsp;
+          <b>Add New Member</b>
+        </button>
+      </div>
       <AddModal add={add} setAdd={setAdd} />
       <DashboardTable />
     </>

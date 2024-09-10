@@ -27,6 +27,10 @@ const userSchema = new Schema(
       default:
         "https://res.cloudinary.com/dv1aih4ps/image/upload/v1633123045/Profile%20Photos/blank-profile-picture-973460_640",
     },
+    packages: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       default: "user",

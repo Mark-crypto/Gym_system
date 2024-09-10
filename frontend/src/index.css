@@ -40,3 +40,10 @@
 .error-text a button:hover {
   background: rgb(156, 1, 156);
 }
+.dashboard-btn {
+  margin: 20px 0px 20px 20px;
+}
+.dashboard-icon {
+  font-size: 30px;
+  font-weight: bold;
+}
