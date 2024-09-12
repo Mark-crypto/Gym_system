@@ -16,14 +16,16 @@ export const AddModal = ({ add, setAdd }) => {
     confirmPassword: "",
   });
 
+  //Close our modal
   const handleHide = () => setAdd(false);
-
+  //Handling inputs
   const handleInput = (e) => {
     setRegistration({ ...registration, [e.target.name]: e.target.value });
   };
   //Handling submit
   const handleSubmit = (e) => {
     e.preventDefault();
+    setAdd(false);
     const {
       fname,
       lname,
@@ -34,31 +36,43 @@ export const AddModal = ({ add, setAdd }) => {
       image,
       password,
     } = registration;
-    if (!fname || !lname || !email || !number || !packages || !password) return;
-    if (password !== confirmPassword) return;
-    const hashedPassword = bcrypt.hash(password, 10);
+
+    //Error handling
+    if (!fname || !lname || !email || !number || !packages || !password)
+      return console.log("All fields are required");
+    if (password !== confirmPassword)
+      return console.log("Passwords must match");
+
+    //Hashing passwords
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
+    const registrationData = {
+      ...registration,
+      password: hashedPassword,
+      confirmPassword: "",
+    };
     //change to use axios for better error handling
     const submitForm = async () => {
-      const registrationData = { ...registration, password: hashedPassword };
-      const results = await fetch("http://localhost:3000/registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registrationData),
-      });
-      const responseJson = await results.json();
-      console.log(responseJson);
+      try {
+        const formData = await axios.post("/registration", {
+          registrationData,
+        });
+        console.log(formData);
+      } catch (error) {
+        console.log(error.response.status);
+      }
     };
+    console.log(registrationData);
     //submitForm();
-    console.log("Form submitted");
     setRegistration({});
   };
+
   return (
     <>
       <Modal show={add} onHide={handleHide}>
         <Modal.Header closeButton>
-          <Modal.Title>Add User</Modal.Title>
+          <Modal.Title>Add Member</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>

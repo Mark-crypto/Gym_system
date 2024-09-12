@@ -8,13 +8,13 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 export const Dashboard = () => {
   const [add, setAdd] = useState(false);
 
-  const handleOpen = () => setAdd(true);
+  const handleAddMember = () => setAdd(true);
 
   return (
     <>
       <AdminNav />
       <div className="dashboard-btn">
-        <button className="btn btn-primary" onClick={handleOpen}>
+        <button className="btn btn-primary" onClick={handleAddMember}>
           <IoMdAddCircleOutline className="dashboard-icon" />
           &nbsp;
           <b>Add New Member</b>

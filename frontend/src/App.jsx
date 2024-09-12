@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-
+import "./globals";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Feedback } from "./pages/Feedback";

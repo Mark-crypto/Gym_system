@@ -4,9 +4,6 @@ import Table from "react-bootstrap/Table";
 import { DeleteModal } from "./DeleteModal";
 import { useState } from "react";
 import { EditModal } from "./EditModal";
-import { useFetch } from "../customHooks/useFetch.js";
-import { Loading } from "./Loading.jsx";
-import { ErrorBoundary } from "../pages/ErrorBoundary.jsx";
 
 export const DashboardTable = () => {
   //const url = "http://localhost:3000/";

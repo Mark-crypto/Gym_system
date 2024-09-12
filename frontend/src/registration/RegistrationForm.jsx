@@ -1,0 +1,119 @@
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+
+export const RegistrationForm = ({
+  handleSubmit,
+  registration,
+  handleInput,
+}) => {
+  return (
+    <>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="fname">First Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter first name"
+            name="fname"
+            id="fname"
+            onChange={handleInput}
+            value={registration.fname}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="lname">Last Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter last name"
+            name="lname"
+            id="lname"
+            onChange={handleInput}
+            value={registration.lname}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
+          <Form.Control
+            type="file"
+            accept="image/png, image/jpeg, image/jpg"
+            placeholder="Profile photo"
+            name="photo"
+            id="photo"
+            onChange={handleInput}
+            value={registration.photo}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="email">Email address</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            name="email"
+            id="email"
+            onChange={handleInput}
+            value={registration.email}
+          />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="number">Phone Number</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter phone number"
+            name="number"
+            id="number"
+            onChange={handleInput}
+            value={registration.number}
+          />
+        </Form.Group>
+        <Form.Label htmlFor="packages">Select Package:</Form.Label>
+        <Form.Select
+          aria-label="Default select example"
+          name="packages"
+          value={registration.packages}
+          onChange={handleInput}
+          id="packages"
+        >
+          <option value="weightLifting">Weight Lifting</option>
+          <option value="aerobics">Aerobics</option>
+          <option value="zumba">Zumba</option>
+          <option value="karate">Karate</option>
+          <option value="boxing">Boxing</option>
+        </Form.Select>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="password">Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+            onChange={handleInput}
+            value={registration.password}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="confirmPassword">Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirm password"
+            name="confirmPassword"
+            id="confirmPassword"
+            onChange={handleInput}
+            value={registration.confirmPassword}
+          />
+        </Form.Group>
+        <p className="login-text">
+          Have an account already? <a href="/login">Login</a>
+        </p>
+        <Button variant="primary" type="submit" className="registration-btn">
+          <b> Register</b>
+        </Button>
+      </Form>
+    </>
+  );
+};

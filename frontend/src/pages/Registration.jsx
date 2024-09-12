@@ -1,8 +1,8 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import "./registration.css";
 import { useState } from "react";
 import bcrypt from "bcryptjs";
+import { RegistrationForm } from "../registration/RegistrationForm";
+import axios from "axios";
 
 export const Registration = () => {
   const [registration, setRegistration] = useState({
@@ -15,10 +15,13 @@ export const Registration = () => {
     password: "",
     confirmPassword: "",
   });
+
+  //Send to data to server
   const handleSubmit = (e) => {
     e.preventDefault();
     const { fname, lname, email, number, packages, password, confirmPassword } =
       registration;
+
     if (
       !fname ||
       !lname ||
@@ -28,27 +31,36 @@ export const Registration = () => {
       !password ||
       !confirmPassword
     )
-      return;
-    if (password !== confirmPassword) return;
-    const hashedPassword = bcrypt.hash(password, 10);
-    const registrationData = { ...registration, password: hashedPassword };
+      return console.log("All fields are required");
+
+    if (password !== confirmPassword)
+      return console.log("Passwords do not match");
+
+    //Hashing our password
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    const registrationData = {
+      ...registration,
+      password: hashedPassword,
+      confirmPassword: "",
+    };
+
     //change to use axios for better error handling
     const submitForm = async () => {
-      const registrationData = { ...registration, password: hashedPassword };
-      const results = await fetch("http://localhost:3000/registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registrationData),
-      });
-      const responseJson = await results.json();
-      console.log(responseJson);
+      try {
+        const formData = await axios.post("/registration", {
+          registrationData,
+        });
+        console.log(formData);
+      } catch (error) {
+        console.log(error.response.status);
+      }
     };
     //submitForm();
-    console.log(registrationData);
-    setRegistration([]);
+    setRegistration({});
   };
+
+  //Taking in form input
   const handleInput = (e) => {
     setRegistration({ ...registration, [e.target.name]: e.target.value });
   };
@@ -65,111 +77,11 @@ export const Registration = () => {
         >
           Registration
         </h4>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="fname">First Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter first name"
-              name="fname"
-              id="fname"
-              onChange={handleInput}
-              value={registration.fname}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="lname">Last Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter last name"
-              name="lname"
-              id="lname"
-              onChange={handleInput}
-              value={registration.lname}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/png, image/jpeg, image/jpg"
-              placeholder="Profile photo"
-              name="photo"
-              id="photo"
-              onChange={handleInput}
-              value={registration.photo}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="email">Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              id="email"
-              onChange={handleInput}
-              value={registration.email}
-            />
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="number">Phone Number</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter phone number"
-              name="number"
-              id="number"
-              onChange={handleInput}
-              value={registration.number}
-            />
-          </Form.Group>
-          <Form.Label htmlFor="packages">Select Package:</Form.Label>
-          <Form.Select
-            aria-label="Default select example"
-            name="packages"
-            value={registration.packages}
-            onChange={handleInput}
-            id="packages"
-          >
-            <option value="weightLifting">Weight Lifting</option>
-            <option value="aerobics">Aerobics</option>
-            <option value="zumba">Zumba</option>
-            <option value="karate">Karate</option>
-            <option value="boxing">Boxing</option>
-          </Form.Select>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="password">Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              name="password"
-              id="password"
-              onChange={handleInput}
-              value={registration.password}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="confirmPassword">Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Confirm password"
-              name="confirmPassword"
-              id="confirmPassword"
-              onChange={handleInput}
-              value={registration.confirmPassword}
-            />
-          </Form.Group>
-          <p className="login-text">
-            Have an account already? <a href="/login">Login</a>
-          </p>
-          <Button variant="primary" type="submit" className="registration-btn">
-            <b> Register</b>
-          </Button>
-        </Form>
+        <RegistrationForm
+          handleSubmit={handleSubmit}
+          registration={registration}
+          handleInput={handleInput}
+        />
       </div>
     </>
   );
