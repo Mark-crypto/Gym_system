@@ -1,18 +1,16 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import bcrypt from "bcryptjs";
+import axios from "axios";
 import { useState } from "react";
 
-export const EditModal = ({ show, handleClose }) => {
+export const EditModal = ({ show, handleClose, edit, setShow }) => {
   const [registration, setRegistration] = useState({
     fname: "",
     lname: "",
-    photo: "",
     email: "",
     number: "",
     packages: "",
-    password: "",
   });
 
   const handleInput = (e) => {
@@ -21,26 +19,22 @@ export const EditModal = ({ show, handleClose }) => {
   //Handling submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { fname, lname, email, number, packages, password } = registration;
-    if (!fname || !lname || !email || !number || !packages || !password) return;
-    const confirmPassword = confirmRef.current.confirmPassword;
-    if (password !== confirmPassword) return;
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const submitForm = async () => {
-      const registrationData = { ...registration, password: hashedPassword };
-      const results = await fetch("http://localhost:3000/registration", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registrationData),
-      });
-      const responseJson = await results.json();
-      console.log(responseJson);
-    };
-    submitForm();
-    console.log("Form submitted");
-    setRegistration({});
+    const { fname, lname, email, number, packages } = registration;
+    if (!fname || !lname || !email || !number || !packages)
+      return console.log("All fields are required");
+
+    try {
+      const submitForm = async () => {
+        const registrationData = { ...registration };
+        const res = await axios.put("/update", { registrationData });
+        console.log(res.data);
+      };
+      // submitForm();
+      console.log("Form submitted");
+      setShow(false);
+    } catch (error) {
+      console.log(error.response.status);
+    }
   };
 
   return (

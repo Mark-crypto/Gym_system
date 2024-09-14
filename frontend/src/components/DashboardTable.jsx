@@ -4,30 +4,48 @@ import Table from "react-bootstrap/Table";
 import { DeleteModal } from "./DeleteModal";
 import { useState } from "react";
 import { EditModal } from "./EditModal";
+import axios from "axios";
 
 export const DashboardTable = () => {
   //const url = "http://localhost:3000/";
   //const { isLoading, isError } = useFetch(url);
   const [del, setDel] = useState(false);
   const [show, setShow] = useState(false);
+  const [edit, setEdit] = useState([]);
 
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    try {
+      const fetchData = async () => {
+        const res = await axios("/dashboard");
+        console.log(res.data);
+        setEdit(res.data);
+      };
+      //fetchData();
+      console.log("Updated");
+    } catch (error) {
+      console.log(error.response.status);
+    }
+  };
   const handleClose = () => setShow(false);
   const handleShowDel = () => setDel(true);
   const handleCloseDel = () => setDel(false);
 
   const handleDelete = () => {
     if (del) {
-      const deleteData = async () => {
-        const results = await fetch("http://localhost:3000/delete", {
-          method: "DELETE",
-        });
-        const responseJson = await results.json();
-        console.log(responseJson);
-      };
-      setDel(false);
-      deleteData();
-      console.log("deleted");
+      try {
+        const deleteData = async () => {
+          const response = await axios.delete("/delete");
+          if (response.status === 200) {
+            console.log("deleted");
+          }
+        };
+        //deleteData();
+        setDel(false);
+        console.log("Deleted");
+      } catch (error) {
+        console.log(error.response.status);
+      }
     }
   };
 
@@ -113,7 +131,12 @@ export const DashboardTable = () => {
         handleCloseDel={handleCloseDel}
         handleDelete={handleDelete}
       />
-      <EditModal show={show} handleClose={handleClose} />
+      <EditModal
+        show={show}
+        handleClose={handleClose}
+        edit={edit}
+        setShow={setShow}
+      />
     </>
   );
 };

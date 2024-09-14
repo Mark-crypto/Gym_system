@@ -22,24 +22,22 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = login;
-    if (!email || !password) return;
+    if (!email || !password) return console.log("All fields are required");
     //Hashing our password
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const submitForm = async () => {
-      const loginData = { ...login, password: hashedPassword };
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
-      const responseJson = await response.json();
-      console.log(responseJson);
-    };
-    submitForm();
-    //clear form
-    setLogin({});
+    try {
+      const submitForm = async () => {
+        const loginData = { ...login, password: hashedPassword };
+        const res = await axios.post("/login", { loginData });
+        console.log(res.data);
+      };
+      //submitForm();
+      console.log("You are logged in");
+      //clear form
+      setLogin({});
+    } catch (error) {
+      console.log(error.response.status);
+    }
   };
 
   //Check for errors
