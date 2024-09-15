@@ -94,6 +94,16 @@ export const RegistrationForm = ({
             onChange={handleInput}
             value={registration.password}
           />
+          <Form.Text className="text-muted">
+            The password needs to contain:
+            <ul>
+              <li>a lowercase letter</li>
+              <li>an uppercase letter</li>
+              <li>a number</li>
+              <li>a special character</li>
+              <li>at least 8 characters</li>
+            </ul>
+          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3">
