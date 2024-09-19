@@ -3,6 +3,9 @@ import Form from "react-bootstrap/Form";
 import "./registration.css";
 import { UserNav } from "../components/UserNav";
 import { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import { FeedbackValidation } from "../Schemas/FeedbackValidation.js";
+import axios from "axios";
 
 export const Feedback = () => {
   const [feedback, setFeedback] = useState({
@@ -12,22 +15,38 @@ export const Feedback = () => {
     message: "",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, email, number, message } = feedback;
-    if (!name || !email || !number || !message) return;
-    const feedbackData = feedback;
-    console.log("Submit");
-    setFeedback({});
-  };
-  const handleInput = (e) => {
-    setFeedback({ ...feedback, [e.target.name]: e.target.value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      number: "",
+      message: "",
+    },
+    validationSchema: FeedbackValidation,
+    onSubmit: (values) => {
+      const { name, email, number, message } = values;
+      if (!name || !email || !number || !message)
+        return console.log("All fields are required");
+      const feedback = values;
+      try {
+        const submitFeedback = async () => {
+          const response = await axios.post("/feedback", { feedback });
+          console.log(response.data);
+        };
+        // submitFeedback()
+        console.log("Submit");
+        setFeedback("");
+      } catch (error) {
+        console.log(error.response.status);
+      }
+    },
+  });
+
   return (
     <>
       <UserNav />
       <div>
-        <Form onSubmit={handleSubmit} className="feedback-form">
+        <Form onSubmit={formik.handleSubmit} className="feedback-form">
           <h4
             style={{
               textAlign: "center",
@@ -45,9 +64,15 @@ export const Feedback = () => {
               placeholder="Full name"
               name="name"
               id="name"
-              onChange={handleInput}
-              value={feedback.name}
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched && formik.errors.name ? (
+              <small style={{ color: "red" }}>{formik.errors.name}</small>
+            ) : (
+              ""
+            )}
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label htmlFor="email">Email address</Form.Label>
@@ -56,9 +81,15 @@ export const Feedback = () => {
               placeholder="Enter email"
               name="email"
               id="email"
-              onChange={handleInput}
-              value={feedback.email}
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched && formik.errors.email ? (
+              <small style={{ color: "red" }}>{formik.errors.email}</small>
+            ) : (
+              ""
+            )}
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
@@ -71,9 +102,15 @@ export const Feedback = () => {
               placeholder="Phone number"
               name="number"
               id="number"
-              onChange={handleInput}
-              value={feedback.number}
+              onChange={formik.handleChange}
+              value={formik.values.number}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched && formik.errors.number ? (
+              <small style={{ color: "red" }}>{formik.errors.number}</small>
+            ) : (
+              ""
+            )}
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label htmlFor="number">Message</Form.Label>
@@ -83,12 +120,18 @@ export const Feedback = () => {
               id="message"
               cols="30"
               rows="10"
-              onChange={handleInput}
+              onChange={formik.handleChange}
               className="message"
-              value={feedback.message}
+              value={formik.values.message}
+              onBlur={formik.handleBlur}
             />
             <br />
           </Form.Group>
+          {formik.touched && formik.errors.message ? (
+            <small style={{ color: "red" }}>{formik.errors.message}</small>
+          ) : (
+            ""
+          )}
           <Button variant="primary" type="submit" className="feedback-btn">
             Submit
           </Button>

@@ -13,32 +13,36 @@ export const Login = () => {
     email: "",
     password: "",
   });
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: LoginValidation,
+    onSubmit: (values) => {
+      const { email, password } = values;
+      if (!email || !password) return console.log("All fields are required");
+      //Hashing our password
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      try {
+        const submitForm = async () => {
+          const login = { ...values, password: hashedPassword };
+          const response = await axios.post("/login", { login });
+          console.log(response.data);
+        };
+        //submitForm();
+        console.log("You are logged in");
+        //clear form
+        setLogin("");
+      } catch (error) {
+        console.log(error.response.status);
+      }
+    },
+  });
+
   //Set state for error
   const [error, setError] = useState(false);
-  const handleChange = (e) => {
-    setLogin({ ...login, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = login;
-    if (!email || !password) return console.log("All fields are required");
-    //Hashing our password
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    try {
-      const submitForm = async () => {
-        const loginData = { ...login, password: hashedPassword };
-        const res = await axios.post("/login", { loginData });
-        console.log(res.data);
-      };
-      //submitForm();
-      console.log("You are logged in");
-      //clear form
-      setLogin({});
-    } catch (error) {
-      console.log(error.response.status);
-    }
-  };
 
   //Check for errors
   if (error) {
@@ -51,7 +55,7 @@ export const Login = () => {
   return (
     <>
       <div className="login-form">
-        <Form onSubmit={handleSubmit} className="login">
+        <Form onSubmit={formik.handleSubmit} className="login">
           <p className="login-text">
             Ready to transform your health? Join our state-of-the-art gym and
             discover a supportive community focused on your success! Start your
@@ -65,13 +69,16 @@ export const Login = () => {
               placeholder="Enter email"
               name="email"
               id="email"
-              onChange={handleChange}
-              value={login.email}
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              onBlur={formik.handleBlur}
             />
-            {/* {errors.email && (
-              <small style={{ color: "red" }}>{errors.email}</small>
-            )}{" "}
-            <br /> */}
+            {formik.touched && formik.errors.email ? (
+              <small style={{ color: "red" }}>{formik.errors.email}</small>
+            ) : (
+              ""
+            )}
+            <br />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
@@ -84,12 +91,15 @@ export const Login = () => {
               placeholder="Password"
               name="password"
               id="password"
-              onChange={handleChange}
-              value={login.password}
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              onBlur={formik.handleBlur}
             />
-            {/* {errors.password && (
-              <small style={{ color: "red" }}>{errors.password}</small>
-            )} */}
+            {formik.password && formik.errors.password ? (
+              <small style={{ color: "red" }}>{formik.errors.password}</small>
+            ) : (
+              ""
+            )}
           </Form.Group>
           <p className="login-text">
             Don't have an account?{" "}

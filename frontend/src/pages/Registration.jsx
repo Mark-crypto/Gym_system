@@ -3,6 +3,8 @@ import { useState } from "react";
 import bcrypt from "bcryptjs";
 import { RegistrationForm } from "../registration/RegistrationForm";
 import axios from "axios";
+import { useFormik } from "formik";
+import { RegisterValidation } from "../validation/RegisterValidation.js";
 
 export const Registration = () => {
   const [registration, setRegistration] = useState({
@@ -16,54 +18,68 @@ export const Registration = () => {
     confirmPassword: "",
   });
 
-  //Send to data to server
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { fname, lname, email, number, packages, password, confirmPassword } =
-      registration;
-
-    if (
-      !fname ||
-      !lname ||
-      !email ||
-      !number ||
-      !packages ||
-      !password ||
-      !confirmPassword
-    )
-      return console.log("All fields are required");
-
-    if (password !== confirmPassword)
-      return console.log("Passwords do not match");
-
-    //Hashing our password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
-    const registrationData = {
-      ...registration,
-      password: hashedPassword,
+  const formik = useFormik({
+    initialValues: {
+      fname: "",
+      lname: "",
+      photo: "",
+      email: "",
+      number: "",
+      packages: "",
+      password: "",
       confirmPassword: "",
-    };
+    },
+    validationSchema: RegisterValidation,
+    onSubmit: (values) => {
+      const {
+        fname,
+        lname,
+        email,
+        number,
+        packages,
+        password,
+        confirmPassword,
+      } = values;
 
-    //change to use axios for better error handling
-    const submitForm = async () => {
-      try {
-        const formData = await axios.post("/registration", {
-          registrationData,
-        });
-        console.log(formData);
-      } catch (error) {
-        console.log(error.response.status);
-      }
-    };
-    //submitForm();
-    setRegistration({});
-  };
+      if (
+        !fname ||
+        !lname ||
+        !email ||
+        !number ||
+        !packages ||
+        !password ||
+        !confirmPassword
+      )
+        return console.log("All fields are required");
 
-  //Taking in form input
-  const handleInput = (e) => {
-    setRegistration({ ...registration, [e.target.name]: e.target.value });
-  };
+      if (password !== confirmPassword)
+        return console.log("Passwords do not match");
+
+      //Hashing our password
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+      const registration = {
+        ...values,
+        password: hashedPassword,
+        confirmPassword: "",
+      };
+
+      //change to use axios for better error handling
+      const submitForm = async () => {
+        try {
+          const formData = await axios.post("/registration", {
+            registration,
+          });
+          console.log(formData);
+        } catch (error) {
+          console.log(error.response.status);
+        }
+      };
+      //submitForm();
+      setRegistration("");
+    },
+  });
+
   return (
     <>
       <div className="registration-form">
@@ -78,9 +94,12 @@ export const Registration = () => {
           Registration
         </h4>
         <RegistrationForm
-          handleSubmit={handleSubmit}
-          registration={registration}
-          handleInput={handleInput}
+          handleSubmit={formik.handleSubmit}
+          values={formik.values}
+          handleBlur={formik.handleBlur}
+          handleChange={formik.handleChange}
+          errors={formik.errors}
+          touched={formik.touched}
         />
       </div>
     </>

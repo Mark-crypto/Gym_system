@@ -1,6 +1,6 @@
 import Yup from "yup";
 
-export const feedBackSchema = Yup.object({
+export const FeedbackValidation = Yup.object({
   name: Yup.string().required("Enter your full name"),
   email: Yup.string()
     .email()

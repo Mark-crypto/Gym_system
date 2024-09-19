@@ -1,6 +1,6 @@
 import Yup from "yup";
 
-export const registerValidation = Yup.object({
+export const RegisterValidation = Yup.object({
   fname: Yup.string().min(2).required("Enter your first name"),
   lname: Yup.string().min(2).required("Enter your last name"),
   email: Yup.string()

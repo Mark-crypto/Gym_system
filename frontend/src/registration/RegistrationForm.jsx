@@ -4,8 +4,11 @@ import Form from "react-bootstrap/Form";
 
 export const RegistrationForm = ({
   handleSubmit,
-  registration,
-  handleInput,
+  values,
+  handleChange,
+  handleBlur,
+  errors,
+  touched,
 }) => {
   return (
     <>
@@ -17,9 +20,15 @@ export const RegistrationForm = ({
             placeholder="Enter first name"
             name="fname"
             id="fname"
-            onChange={handleInput}
-            value={registration.fname}
+            onChange={handleChange}
+            value={values.fname}
+            onBlur={handleBlur}
           />
+          {touched && errors.fname ? (
+            <small style={{ color: "red" }}>{errors.fname}</small>
+          ) : (
+            ""
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="lname">Last Name</Form.Label>
@@ -28,9 +37,15 @@ export const RegistrationForm = ({
             placeholder="Enter last name"
             name="lname"
             id="lname"
-            onChange={handleInput}
-            value={registration.lname}
+            onChange={handleChange}
+            value={values.lname}
+            onBlur={handleBlur}
           />
+          {touched && errors.lname ? (
+            <small style={{ color: "red" }}>{errors.lname}</small>
+          ) : (
+            ""
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
@@ -40,8 +55,8 @@ export const RegistrationForm = ({
             placeholder="Profile photo"
             name="photo"
             id="photo"
-            onChange={handleInput}
-            value={registration.photo}
+            onChange={handleChange}
+            value={values.photo}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -51,9 +66,15 @@ export const RegistrationForm = ({
             placeholder="Enter email"
             name="email"
             id="email"
-            onChange={handleInput}
-            value={registration.email}
+            onChange={handleChange}
+            value={values.email}
+            onBlur={handleBlur}
           />
+          {touched && errors.email ? (
+            <small style={{ color: "red" }}>{errors.email}</small>
+          ) : (
+            ""
+          )}
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
@@ -66,16 +87,23 @@ export const RegistrationForm = ({
             placeholder="Enter phone number"
             name="number"
             id="number"
-            onChange={handleInput}
-            value={registration.number}
+            onChange={handleChange}
+            value={values.number}
+            onBlur={handleBlur}
           />
+          {touched && errors.number ? (
+            <small style={{ color: "red" }}>{errors.number}</small>
+          ) : (
+            ""
+          )}
         </Form.Group>
         <Form.Label htmlFor="packages">Select Package:</Form.Label>
         <Form.Select
           aria-label="Default select example"
           name="packages"
-          value={registration.packages}
-          onChange={handleInput}
+          value={values.packages}
+          onBlur={handleBlur}
+          onChange={handleChange}
           id="packages"
         >
           <option value="weightLifting">Weight Lifting</option>
@@ -84,6 +112,11 @@ export const RegistrationForm = ({
           <option value="karate">Karate</option>
           <option value="boxing">Boxing</option>
         </Form.Select>
+        {touched && errors.packages ? (
+          <small style={{ color: "red" }}>{errors.packages}</small>
+        ) : (
+          ""
+        )}
         <Form.Group className="mb-3">
           <Form.Label htmlFor="password">Password</Form.Label>
           <Form.Control
@@ -91,17 +124,23 @@ export const RegistrationForm = ({
             placeholder="Password"
             name="password"
             id="password"
-            onChange={handleInput}
-            value={registration.password}
+            onChange={handleChange}
+            value={values.password}
+            onBlur={handleBlur}
           />
+          {touched && errors.password ? (
+            <small style={{ color: "red" }}>{errors.password}</small>
+          ) : (
+            ""
+          )}
           <Form.Text className="text-muted">
-            The password needs to contain:
+            The password must contain:
             <ul>
               <li>a lowercase letter</li>
               <li>an uppercase letter</li>
               <li>a number</li>
               <li>a special character</li>
-              <li>at least 8 characters</li>
+              <li>at least 8 characters long</li>
             </ul>
           </Form.Text>
         </Form.Group>
@@ -113,9 +152,15 @@ export const RegistrationForm = ({
             placeholder="Confirm password"
             name="confirmPassword"
             id="confirmPassword"
-            onChange={handleInput}
-            value={registration.confirmPassword}
+            onChange={handleChange}
+            value={values.confirmPassword}
+            onBlur={handleBlur}
           />
+          {touched && errors.confirmPassword ? (
+            <small style={{ color: "red" }}>{errors.confirmPassword}</small>
+          ) : (
+            ""
+          )}
         </Form.Group>
         <p className="login-text">
           Have an account already? <a href="/login">Login</a>

@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { UserNav } from "../components/UserNav";
 import "./profile.css";
 import defaultProfile from "../assets/default.jpg";
+import axios from "axios";
 
 export const Profile = () => {
   const [profile, setProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    try {
+      const fetchProfile = async () => {
+        const response = await axios("/profile");
+        console.log(response.data);
+        setProfile(response.data);
+        setIsLoading(false);
+      };
+      //fetchProfile()
+      console.log("Form submitted");
+    } catch (error) {
+      console.log(error.response.status);
+      setIsError(true);
+      setIsLoading(false);
+    }
+  }, []);
   return (
     <>
       <UserNav />

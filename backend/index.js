@@ -6,7 +6,7 @@ import cors from "cors";
 import { dbConnection } from "./dBconn.js";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 const students = [
   { id: 1, name: "Mark", age: 14 },
   { id: 2, name: "Naomi", age: 27 },
