@@ -1,17 +1,17 @@
 import { Router } from "express";
+import {
+  memberFeedback,
+  profile,
+  adminFeedback,
+} from "../controllers/userController";
 
 const router = Router();
 
 //User management
 //User profile
-router.get("/profile", (req, res) => {
-  res.send("User profile");
-});
-//Feedback
-router.get("/feedback", (req, res) => {
-  res.send("User feedback");
-});
-router.post("/feedback", (req, res) => {
-  res.send("Sent successful");
-});
+router.get("/profile", profile);
+//Admin Feedback
+router.get("/feedback", adminFeedback);
+//User feedback
+router.post("/feedback", memberFeedback);
 export default router;
