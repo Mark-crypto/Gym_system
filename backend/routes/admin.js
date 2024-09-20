@@ -1,30 +1,20 @@
 import { Router } from "express";
-import cookieParser from "cookie-parser";
+import {
+  createUser,
+  updateUser,
+  deleteUser,
+  getUsers,
+} from "../controllers/dashboardController";
 
 const router = Router();
 
 //admin dashboard
-router.get("/dashboard", (req, res) => {
-  res.send("Admin dashboard");
-});
+router.get("/dashboard", getUsers);
 //add new user
-router.post("/dashboard", (req, res) => {
-  res.send("added successfully");
-});
+router.post("/dashboard", createUser);
 //edit
-router.put("/dashboard", (req, res) => {
-  res.send("Record updated successfully");
-});
+router.put("/dashboard", updateUser);
 //delete
-router.delete("/dashboard", (req, res) => {
-  res.send("Record deleted successfully");
-});
-//reports
-router.get("/reports", (req, res) => {
-  res.send("System reports");
-});
-//Send email
-router.get("/send-email", (req, res) => {
-  res.send("Send automated email");
-});
+router.delete("/dashboard", deleteUser);
+
 export default router;

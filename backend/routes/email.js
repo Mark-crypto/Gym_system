@@ -1,10 +1,9 @@
 import { Router } from "express";
+import { sendEmail } from "../controllers/emailController";
 
 const router = Router();
 
 //Send email
-router.get("/send-email", (req, res) => {
-  res.send("Send automated email");
-});
+router.get("/send-email", sendEmail);
 
 export default router;

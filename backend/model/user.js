@@ -4,11 +4,11 @@ const { Schema, model } = mongoose;
 //Schema
 const userSchema = new Schema(
   {
-    first_name: {
+    fname: {
       type: String,
       required: true,
     },
-    last_name: {
+    lname: {
       type: String,
       required: true,
     },
@@ -22,7 +22,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    profilePhoto: {
+    photo: {
       type: String,
       default:
         "https://res.cloudinary.com/dv1aih4ps/image/upload/v1633123045/Profile%20Photos/blank-profile-picture-973460_640",
