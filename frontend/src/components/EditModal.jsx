@@ -3,8 +3,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
 export const EditModal = ({ show, handleClose, edit, setShow }) => {
+  //more imports
   const [registration, setRegistration] = useState({
     fname: "",
     lname: "",
@@ -13,29 +17,35 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
     packages: "",
   });
 
-  const handleInput = (e) => {
-    setRegistration({ ...registration, [e.target.name]: e.target.value });
-  };
-  //Handling submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { fname, lname, email, number, packages } = registration;
-    if (!fname || !lname || !email || !number || !packages)
-      return console.log("All fields are required");
+  const formik = useFormik({
+    initialValues: {
+      fname: "",
+      lname: "",
+      email: "",
+      number: "",
+      packages: "",
+    },
+    validationSchema: RegisterValidation,
+    onSubmit: (values) => {
+      const { fname, lname, email, number, packages } = values;
+      if (!fname || !lname || !email || !number || !packages)
+        return toast.error("All fields are required");
 
-    try {
-      const submitForm = async () => {
-        const registrationData = { ...registration };
-        const res = await axios.put("/update", { registrationData });
-        console.log(res.data);
-      };
-      // submitForm();
-      console.log("Form submitted");
-      setShow(false);
-    } catch (error) {
-      console.log(error.response.status);
-    }
-  };
+      try {
+        const submitForm = async () => {
+          const registrationData = { ...registration };
+          const res = await axios.put("/update", { registrationData });
+          console.log(res.data);
+        };
+        // submitForm();
+        toast.success("Form submitted successfully");
+        edit(registration);
+        setShow(false);
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    },
+  });
 
   return (
     <>
@@ -44,7 +54,7 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
           <Modal.Title>Update Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label htmlFor="fname">First Name</Form.Label>
               <Form.Control
@@ -52,9 +62,15 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 placeholder="Enter first name"
                 name="fname"
                 id="fname"
-                onChange={handleInput}
-                value={registration.fname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.fname}
               />
+              {formik.touched && formik.errors.fname ? (
+                <small style={{ color: "red" }}>{formik.errors.fname}</small>
+              ) : (
+                ""
+              )}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label htmlFor="lname">Last Name</Form.Label>
@@ -63,9 +79,15 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 placeholder="Enter last name"
                 name="lname"
                 id="lname"
-                onChange={handleInput}
-                value={registration.lname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.lname}
               />
+              {formik.touched && formik.errors.lname ? (
+                <small style={{ color: "red" }}>{formik.errors.lname}</small>
+              ) : (
+                ""
+              )}
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -75,9 +97,15 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 placeholder="Enter email"
                 name="email"
                 id="email"
-                onChange={handleInput}
-                value={registration.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
+              {formik.touched && formik.errors.email ? (
+                <small style={{ color: "red" }}>{formik.errors.email}</small>
+              ) : (
+                ""
+              )}
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -87,16 +115,23 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 placeholder="Enter phone number"
                 name="number"
                 id="number"
-                onChange={handleInput}
-                value={registration.number}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.number}
               />
+              {formik.touched && formik.errors.number ? (
+                <small style={{ color: "red" }}>{formik.errors.number}</small>
+              ) : (
+                ""
+              )}
             </Form.Group>
             <Form.Label htmlFor="packages">Select Package:</Form.Label>
             <Form.Select
               aria-label="Default select example"
               name="packages"
-              value={registration.packages}
-              onChange={handleInput}
+              value={formik.values.packages}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               id="packages"
             >
               <option value="weightLifting">Weight Lifting</option>
@@ -105,6 +140,11 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               <option value="karate">Karate</option>
               <option value="boxing">Boxing</option>
             </Form.Select>
+            {formik.touched && formik.errors.packages ? (
+              <small style={{ color: "red" }}>{formik.errors.packages}</small>
+            ) : (
+              ""
+            )}
 
             <Button
               type="submit"

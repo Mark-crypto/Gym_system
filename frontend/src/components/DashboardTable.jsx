@@ -5,13 +5,14 @@ import { DeleteModal } from "./DeleteModal";
 import { useState } from "react";
 import { EditModal } from "./EditModal";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const DashboardTable = () => {
   //const url = "http://localhost:3000/";
   //const { isLoading, isError } = useFetch(url);
   const [del, setDel] = useState(false);
   const [show, setShow] = useState(false);
-  const [edit, setEdit] = useState([]);
+  const [edit, setEdit] = useState([]); //should not be empty
 
   const handleShow = () => {
     setShow(true);
@@ -29,7 +30,10 @@ export const DashboardTable = () => {
   };
   const handleClose = () => setShow(false);
   const handleShowDel = () => setDel(true);
-  const handleCloseDel = () => setDel(false);
+  const handleCloseDel = () => {
+    setDel(false);
+    toast.error("You have cancelled the operation");
+  };
 
   const handleDelete = () => {
     if (del) {
@@ -42,9 +46,9 @@ export const DashboardTable = () => {
         };
         //deleteData();
         setDel(false);
-        console.log("Deleted");
+        toast.success("You have successfully deleted record");
       } catch (error) {
-        console.log(error.response.status);
+        toast.error(error.response.data);
       }
     }
   };

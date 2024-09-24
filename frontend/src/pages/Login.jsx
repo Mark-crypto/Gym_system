@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import { LoginValidation } from "../Schemas/LoginValidation";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const [login, setLogin] = useState({
@@ -22,7 +23,7 @@ export const Login = () => {
     validationSchema: LoginValidation,
     onSubmit: (values) => {
       const { email, password } = values;
-      if (!email || !password) return console.log("All fields are required");
+      if (!email || !password) return toast.error("All fields are required");
       //Hashing our password
       const hashedPassword = bcrypt.hashSync(password, 10);
       try {
@@ -32,11 +33,11 @@ export const Login = () => {
           console.log(response.data);
         };
         //submitForm();
-        console.log("You are logged in");
+        toast.success("You are logged in");
         //clear form
         setLogin("");
       } catch (error) {
-        console.log(error.response.status);
+        toast.error(error.response.data);
       }
     },
   });

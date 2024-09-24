@@ -4,3 +4,4 @@ import { getReports } from "../controllers/reportsController";
 
 //reports
 router.get("/reports", getReports);
+export default router;

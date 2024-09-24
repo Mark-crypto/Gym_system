@@ -5,6 +5,7 @@ import { RegistrationForm } from "../registration/RegistrationForm";
 import axios from "axios";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../validation/RegisterValidation.js";
+import { toast } from "react-toastify";
 
 export const Registration = () => {
   const [registration, setRegistration] = useState({
@@ -50,10 +51,10 @@ export const Registration = () => {
         !password ||
         !confirmPassword
       )
-        return console.log("All fields are required");
+        return toast.error("All fields are required");
 
       if (password !== confirmPassword)
-        return console.log("Passwords do not match");
+        return toast.error("Passwords do not match");
 
       //Hashing our password
       const salt = bcrypt.genSaltSync(10);
@@ -72,10 +73,11 @@ export const Registration = () => {
           });
           console.log(formData);
         } catch (error) {
-          console.log(error.response.status);
+          toast.error(error.response.data);
         }
       };
       //submitForm();
+      toast.success("You have successfully registered");
       setRegistration("");
     },
   });

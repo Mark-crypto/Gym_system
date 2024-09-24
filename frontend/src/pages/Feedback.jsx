@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { FeedbackValidation } from "../Schemas/FeedbackValidation.js";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const Feedback = () => {
   const [feedback, setFeedback] = useState({
@@ -26,7 +27,7 @@ export const Feedback = () => {
     onSubmit: (values) => {
       const { name, email, number, message } = values;
       if (!name || !email || !number || !message)
-        return console.log("All fields are required");
+        return toast.error("All fields are required");
       const feedback = values;
       try {
         const submitFeedback = async () => {
@@ -34,10 +35,10 @@ export const Feedback = () => {
           console.log(response.data);
         };
         // submitFeedback()
-        console.log("Submit");
+        toast.success("Form successfully submitted");
         setFeedback("");
       } catch (error) {
-        console.log(error.response.status);
+        toast.error(error.response.data);
       }
     },
   });
