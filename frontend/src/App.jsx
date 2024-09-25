@@ -7,7 +7,10 @@ import { Profile } from "./pages/Profile";
 import { Registration } from "./pages/Registration";
 import { Reports } from "./pages/Reports";
 import { ErrorBoundary } from "./pages/ErrorBoundary";
+import { AdminFeedback } from "./pages/AdminFeedback";
+
 // import { Loading } from "./components/Loading";
+import "react-toastify/dist/ReactToastify.css";
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +31,11 @@ export const router = createBrowserRouter([
   {
     path: "/feedback",
     element: <Feedback />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/admin-feedback",
+    element: <AdminFeedback />,
     errorElement: <ErrorBoundary />,
   },
   {

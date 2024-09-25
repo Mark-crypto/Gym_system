@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { FeedbackValidation } from "../Schemas/FeedbackValidation.js";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export const Feedback = () => {
   const [feedback, setFeedback] = useState({

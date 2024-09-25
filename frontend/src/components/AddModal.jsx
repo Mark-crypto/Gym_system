@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import bcrypt from "bcryptjs";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
@@ -30,53 +30,58 @@ export const AddModal = ({ add, setAdd }) => {
       confirmPassword: "",
     },
     validationSchema: RegisterValidation,
-    onSubmit: (values) => {
-      setAdd(false);
-      const {
-        fname,
-        lname,
-        email,
-        number,
-        packages,
-        confirmPassword,
-        image,
-        password,
-      } = values;
-
-      //Error handling
-      if (!fname || !lname || !email || !number || !packages || !password)
-        return toast.error("All fields are required");
-      if (password !== confirmPassword)
-        return toast.error("Passwords must match");
-
-      //Hashing passwords
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(password, salt);
-
-      const registrationData = {
-        ...registration,
-        password: hashedPassword,
-        confirmPassword: "",
-      };
-      //change to use axios for better error handling
-      const submitForm = async () => {
-        try {
-          const formData = await axios.post("/registration", {
-            registrationData,
-          });
-          console.log(formData);
-        } catch (error) {
-          toast.error(error.response.data);
-        }
-      };
-      console.log(registrationData);
-      //submitForm();
-      toast.success("Form submitted successfully");
-      setRegistration("");
-    },
   });
   //Close our modal
   const handleHide = () => setAdd(false);
+
+  //Submit our form
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const {
+      fname,
+      lname,
+      email,
+      number,
+      packages,
+      confirmPassword,
+      image,
+      password,
+    } = formik.values;
+
+    //Error handling
+    if (!fname || !lname || !email || !number || !packages || !password)
+      return toast.error("All fields are required");
+    if (password !== confirmPassword)
+      return toast.error("Passwords must match");
+
+    //Hashing passwords
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+
+    const registrationData = {
+      ...registration,
+      password: hashedPassword,
+      confirmPassword: "",
+    };
+
+    //change to use axios for better error handling
+    const submitForm = async () => {
+      try {
+        const formData = await axios.post("/registration", {
+          registrationData,
+        });
+        console.log(formData);
+      } catch (error) {
+        toast.error(error.response.data);
+      }
+    };
+    console.log(registrationData);
+    //submitForm();
+    setAdd(false);
+    toast.success("User added successfully");
+    setRegistration("");
+  };
 
   return (
     <>
@@ -85,7 +90,7 @@ export const AddModal = ({ add, setAdd }) => {
           <Modal.Title>Add Member</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={formik.handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="fname">First Name</Form.Label>
               <Form.Control
@@ -97,7 +102,7 @@ export const AddModal = ({ add, setAdd }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.fname}
               />{" "}
-              {formik.touched && formik.errors.fname ? (
+              {formik.touched.fname && formik.errors.fname ? (
                 <small style={{ color: "red" }}>{formik.errors.fname}</small>
               ) : (
                 ""
@@ -114,14 +119,16 @@ export const AddModal = ({ add, setAdd }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.lname}
               />
-              {formik.touched && formik.errors.lname ? (
+              {formik.touched.lname && formik.errors.lname ? (
                 <small style={{ color: "red" }}>{formik.errors.lname}</small>
               ) : (
                 ""
               )}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="photo">Profile photo (optional)</Form.Label>
+              <Form.Label htmlFor="photo">
+                Profile photo <span style={{ color: "red" }}>(optional)</span>
+              </Form.Label>
               <Form.Control
                 type="file"
                 accept="image/png, image/jpeg, image/jpg"
@@ -143,7 +150,7 @@ export const AddModal = ({ add, setAdd }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
-              {formik.touched && formik.errors.email ? (
+              {formik.touched.email && formik.errors.email ? (
                 <small style={{ color: "red" }}>{formik.errors.email}</small>
               ) : (
                 ""
@@ -162,7 +169,7 @@ export const AddModal = ({ add, setAdd }) => {
                 value={formik.values.number}
                 packages
               />
-              {formik.touched && formik.errors.number ? (
+              {formik.touched.number && formik.errors.number ? (
                 <small style={{ color: "red" }}>{formik.errors.number}</small>
               ) : (
                 ""
@@ -171,19 +178,20 @@ export const AddModal = ({ add, setAdd }) => {
             <Form.Label htmlFor="packages">Select Package:</Form.Label>
             <Form.Select
               aria-label="Default select example"
-              name="package
-              onBlur={formik.handleBlur}s"
+              name="packages"
+              onBlur={formik.handleBlur}
               value={formik.values.packages}
               onChange={formik.handleChange}
               id="packages"
             >
+              <option style={{ fontWeight: "bold" }}>Choose an option</option>
               <option value="weightLifting">Weight Lifting</option>
               <option value="aerobics">Aerobics</option>
               <option value="zumba">Zumba</option>
               <option value="karate">Karate</option>
               <option value="boxing">Boxing</option>
             </Form.Select>
-            {formik.touched && formik.errors.packages ? (
+            {formik.touched.packages && formik.errors.packages ? (
               <small style={{ color: "red" }}>{formik.errors.packages}</small>
             ) : (
               ""
@@ -199,11 +207,22 @@ export const AddModal = ({ add, setAdd }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
               />
-              {formik.touched && formik.errors.password ? (
+              {formik.touched.password && formik.errors.password ? (
                 <small style={{ color: "red" }}>{formik.errors.password}</small>
               ) : (
                 ""
-              )}
+              )}{" "}
+              <br />
+              <Form.Text className="text-muted">
+                The password must contain:
+                <ul>
+                  <li>a lowercase letter</li>
+                  <li>an uppercase letter</li>
+                  <li>a number</li>
+                  <li>a special character</li>
+                  <li>at least 8 characters long</li>
+                </ul>
+              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -219,7 +238,8 @@ export const AddModal = ({ add, setAdd }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.confirmPassword}
               />
-              {formik.touched && formik.errors.confirmPassword ? (
+              {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword ? (
                 <small style={{ color: "red" }}>
                   {formik.errors.confirmPassword}
                 </small>

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { RegistrationForm } from "../registration/RegistrationForm";
 import axios from "axios";
 import { useFormik } from "formik";
-import { RegisterValidation } from "../validation/RegisterValidation.js";
+import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 import { toast } from "react-toastify";
 
 export const Registration = () => {

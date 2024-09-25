@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
@@ -26,26 +26,34 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
       packages: "",
     },
     validationSchema: RegisterValidation,
-    onSubmit: (values) => {
-      const { fname, lname, email, number, packages } = values;
-      if (!fname || !lname || !email || !number || !packages)
-        return toast.error("All fields are required");
-
-      try {
-        const submitForm = async () => {
-          const registrationData = { ...registration };
-          const res = await axios.put("/update", { registrationData });
-          console.log(res.data);
-        };
-        // submitForm();
-        toast.success("Form submitted successfully");
-        edit(registration);
-        setShow(false);
-      } catch (error) {
-        toast.error(error.response.data);
-      }
-    },
   });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { fname, lname, email, number, packages } = formik.values;
+    if (!fname || !lname || !email || !number || !packages) {
+      return toast.error("All fields are required");
+    }
+    const data = {
+      fname: formik.values.fname,
+      lname: formik.values.lname,
+      email: formik.values.email,
+      number: formik.values.number,
+      packages: formik.values.packages,
+    };
+    try {
+      const editData = async () => {
+        const response = await axios.put("/edit", data);
+        if (response.status === 200) {
+          console.log("edited");
+        }
+      };
+      //editData();
+      setShow(false);
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+    toast.success("You have successfully edited a record");
+  };
 
   return (
     <>
@@ -54,8 +62,8 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
           <Modal.Title>Update Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={formik.handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="fname">First Name</Form.Label>
               <Form.Control
                 type="text"
@@ -66,13 +74,13 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.fname}
               />
-              {formik.touched && formik.errors.fname ? (
+              {formik.touched.fname && formik.errors.fname ? (
                 <small style={{ color: "red" }}>{formik.errors.fname}</small>
               ) : (
                 ""
               )}
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="lname">Last Name</Form.Label>
               <Form.Control
                 type="text"
@@ -83,14 +91,14 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.lname}
               />
-              {formik.touched && formik.errors.lname ? (
+              {formik.touched.lname && formik.errors.lname ? (
                 <small style={{ color: "red" }}>{formik.errors.lname}</small>
               ) : (
                 ""
               )}
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="email">Email address</Form.Label>
               <Form.Control
                 type="email"
@@ -101,14 +109,14 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
-              {formik.touched && formik.errors.email ? (
+              {formik.touched.email && formik.errors.email ? (
                 <small style={{ color: "red" }}>{formik.errors.email}</small>
               ) : (
                 ""
               )}
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3">
               <Form.Label htmlFor="number">Phone Number</Form.Label>
               <Form.Control
                 type="text"
@@ -119,7 +127,7 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.number}
               />
-              {formik.touched && formik.errors.number ? (
+              {formik.touched.number && formik.errors.number ? (
                 <small style={{ color: "red" }}>{formik.errors.number}</small>
               ) : (
                 ""
@@ -134,13 +142,14 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               onBlur={formik.handleBlur}
               id="packages"
             >
+              <option style={{ fontWeight: "bold" }}>Choose option</option>
               <option value="weightLifting">Weight Lifting</option>
               <option value="aerobics">Aerobics</option>
               <option value="zumba">Zumba</option>
               <option value="karate">Karate</option>
               <option value="boxing">Boxing</option>
             </Form.Select>
-            {formik.touched && formik.errors.packages ? (
+            {formik.touched.packages && formik.errors.packages ? (
               <small style={{ color: "red" }}>{formik.errors.packages}</small>
             ) : (
               ""

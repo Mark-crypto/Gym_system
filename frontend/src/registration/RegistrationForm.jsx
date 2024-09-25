@@ -132,7 +132,8 @@ export const RegistrationForm = ({
             <small style={{ color: "red" }}>{errors.password}</small>
           ) : (
             ""
-          )}
+          )}{" "}
+          <br />
           <Form.Text className="text-muted">
             The password must contain:
             <ul>

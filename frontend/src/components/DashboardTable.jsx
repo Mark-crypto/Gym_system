@@ -5,7 +5,7 @@ import { DeleteModal } from "./DeleteModal";
 import { useState } from "react";
 import { EditModal } from "./EditModal";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export const DashboardTable = () => {
   //const url = "http://localhost:3000/";
@@ -23,16 +23,15 @@ export const DashboardTable = () => {
         setEdit(res.data);
       };
       //fetchData();
-      console.log("Updated");
     } catch (error) {
-      console.log(error.response.status);
+      toast.error(error.response.data);
     }
   };
   const handleClose = () => setShow(false);
   const handleShowDel = () => setDel(true);
   const handleCloseDel = () => {
     setDel(false);
-    toast.error("You have cancelled the operation");
+    toast.warn("You have cancelled the operation", { position: "top-center" });
   };
 
   const handleDelete = () => {
@@ -46,7 +45,9 @@ export const DashboardTable = () => {
         };
         //deleteData();
         setDel(false);
-        toast.success("You have successfully deleted record");
+        toast.success("You have successfully deleted a record", {
+          position: "top-center",
+        });
       } catch (error) {
         toast.error(error.response.data);
       }
@@ -70,6 +71,7 @@ export const DashboardTable = () => {
   // }
   return (
     <>
+      <ToastContainer />
       <Table hover>
         <thead>
           <tr>

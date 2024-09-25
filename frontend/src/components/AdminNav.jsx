@@ -18,7 +18,7 @@ export const AdminNav = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">Dashboard</Nav.Link>
-              <Nav.Link href="/feedback">Review Feedback</Nav.Link>
+              <Nav.Link href="/admin-feedback">Review Feedback</Nav.Link>
               <Nav.Link href="/reports">Reports</Nav.Link>
               <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
