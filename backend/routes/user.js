@@ -11,7 +11,7 @@ const router = Router();
 //User profile
 router.get("/profile", profile);
 //Admin Feedback
-router.get("/feedback", adminFeedback);
+router.get("/admin-feedback", adminFeedback);
 //User feedback
 router.post("/feedback", memberFeedback);
 export default router;

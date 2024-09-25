@@ -2,9 +2,45 @@ import bcrypt from "bcryptjs";
 import User from "../model/user.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const login = (req, res) => {
+//Middleware for verifying user
+export const verifyUser = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  if (!verificationToken) {
+    return res.status(400).json({ message: "Invalid token" });
+  }
+  const user = await User.findOne({
+    verificationToken,
+    verificationTokenExpiresAt: { $gt: Date.now() },
+  });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid token" });
+  }
+  user.isVerified = true;
+  user.verificationToken = undefined;
+  user.verificationTokenExpiresAt = undefined;
+  await user.save();
+  res.status(200).json({ message: "User verified successfully" });
+};
+
+export const login = async (req, res) => {
   const { username, password } = req.body;
+  //check if user exist
+  //check if password is correct
+  //generate token
+  let user;
+  const token = await jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "24h" }
+  );
+  //set cookie
   res.send({ message: "Login successful" });
 };
 

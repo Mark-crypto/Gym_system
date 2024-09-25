@@ -1,23 +1,12 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
 import bcrypt from "bcryptjs";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
 export const AddModal = ({ add, setAdd }) => {
-  const [registration, setRegistration] = useState({
-    fname: "",
-    lname: "",
-    photo: "",
-    email: "",
-    number: "",
-    packages: "",
-    password: "",
-    confirmPassword: "",
-  });
   const formik = useFormik({
     initialValues: {
       fname: "",
@@ -52,6 +41,16 @@ export const AddModal = ({ add, setAdd }) => {
     //Error handling
     if (!fname || !lname || !email || !number || !packages || !password)
       return toast.error("All fields are required");
+    if (
+      formik.errors.confirmPassword ||
+      formik.errors.email ||
+      formik.errors.fname ||
+      formik.errors.lname ||
+      formik.errors.number ||
+      formik.errors.packages ||
+      formik.errors.password
+    )
+      return toast.error("Fill in the form correctly");
     if (password !== confirmPassword)
       return toast.error("Passwords must match");
 

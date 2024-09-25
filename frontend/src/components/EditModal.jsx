@@ -33,13 +33,15 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
     if (!fname || !lname || !email || !number || !packages) {
       return toast.error("All fields are required");
     }
-    const data = {
-      fname: formik.values.fname,
-      lname: formik.values.lname,
-      email: formik.values.email,
-      number: formik.values.number,
-      packages: formik.values.packages,
-    };
+    if (
+      formik.errors.email ||
+      formik.errors.fname ||
+      formik.errors.lname ||
+      formik.errors.number ||
+      formik.errors.packages
+    )
+      return toast.error("Fill in the form correctly");
+    const data = { ...formik.values };
     try {
       const editData = async () => {
         const response = await axios.put("/edit", data);
