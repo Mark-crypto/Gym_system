@@ -60,7 +60,7 @@ export const AddModal = ({ add, setAdd }) => {
     const hashedPassword = bcrypt.hashSync(password, salt);
 
     const registrationData = {
-      ...registration,
+      ...formik.values,
       password: hashedPassword,
       confirmPassword: "",
     };

@@ -2,12 +2,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./login.css";
 import gym from "../assets/fitness-equipment.jpg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import bcrypt from "bcryptjs";
 import { LoginValidation } from "../Schemas/LoginValidation";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export const Login = () => {
   const [login, setLogin] = useState({
@@ -21,27 +21,30 @@ export const Login = () => {
       password: "",
     },
     validationSchema: LoginValidation,
-    onSubmit: (values) => {
-      const { email, password } = values;
-      if (!email || !password) return toast.error("All fields are required");
-      //Hashing our password
-      const hashedPassword = bcrypt.hashSync(password, 10);
-      try {
-        const submitForm = async () => {
-          const login = { ...values, password: hashedPassword };
-          const response = await axios.post("/login", { login });
-          console.log(response.data);
-        };
-        //submitForm();
-        toast.success("You are logged in");
-        //clear form
-        setLogin("");
-      } catch (error) {
-        toast.error(error.response.data);
-      }
-    },
   });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = formik.values;
+    if (!email || !password) return toast.error("All fields are required");
+    if (formik.errors.email || formik.errors.password)
+      return toast.error("Fill in the form correctly");
+    //Hashing our password
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    try {
+      const submitForm = async () => {
+        const login = { ...formik.values, password: hashedPassword };
+        const response = await axios.post("/login", { login });
+        console.log(response.data);
+      };
+      //submitForm();
+      toast.success("You are logged in");
+      //clear form
+      setLogin("");
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
   //Set state for error
   const [error, setError] = useState(false);
 
@@ -55,8 +58,9 @@ export const Login = () => {
   }
   return (
     <>
+      <ToastContainer />
       <div className="login-form">
-        <Form onSubmit={formik.handleSubmit} className="login">
+        <Form onSubmit={handleSubmit} className="login">
           <p className="login-text">
             Ready to transform your health? Join our state-of-the-art gym and
             discover a supportive community focused on your success! Start your
@@ -74,7 +78,7 @@ export const Login = () => {
               value={formik.values.email}
               onBlur={formik.handleBlur}
             />
-            {formik.touched && formik.errors.email ? (
+            {formik.touched.email && formik.errors.email ? (
               <small style={{ color: "red" }}>{formik.errors.email}</small>
             ) : (
               ""
@@ -96,7 +100,7 @@ export const Login = () => {
               value={formik.values.password}
               onBlur={formik.handleBlur}
             />
-            {formik.password && formik.errors.password ? (
+            {formik.touched.password && formik.errors.password ? (
               <small style={{ color: "red" }}>{formik.errors.password}</small>
             ) : (
               ""

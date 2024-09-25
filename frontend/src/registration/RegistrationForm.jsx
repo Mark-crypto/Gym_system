@@ -24,7 +24,7 @@ export const RegistrationForm = ({
             value={values.fname}
             onBlur={handleBlur}
           />
-          {touched && errors.fname ? (
+          {touched.fname && errors.fname ? (
             <small style={{ color: "red" }}>{errors.fname}</small>
           ) : (
             ""
@@ -41,7 +41,7 @@ export const RegistrationForm = ({
             value={values.lname}
             onBlur={handleBlur}
           />
-          {touched && errors.lname ? (
+          {touched.lname && errors.lname ? (
             <small style={{ color: "red" }}>{errors.lname}</small>
           ) : (
             ""
@@ -70,11 +70,12 @@ export const RegistrationForm = ({
             value={values.email}
             onBlur={handleBlur}
           />
-          {touched && errors.email ? (
+          {touched.email && errors.email ? (
             <small style={{ color: "red" }}>{errors.email}</small>
           ) : (
             ""
-          )}
+          )}{" "}
+          <br />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
@@ -91,7 +92,7 @@ export const RegistrationForm = ({
             value={values.number}
             onBlur={handleBlur}
           />
-          {touched && errors.number ? (
+          {touched.number && errors.number ? (
             <small style={{ color: "red" }}>{errors.number}</small>
           ) : (
             ""
@@ -106,13 +107,14 @@ export const RegistrationForm = ({
           onChange={handleChange}
           id="packages"
         >
+          <option style={{ fontWeight: "bold" }}>Choose an option</option>
           <option value="weightLifting">Weight Lifting</option>
           <option value="aerobics">Aerobics</option>
           <option value="zumba">Zumba</option>
           <option value="karate">Karate</option>
           <option value="boxing">Boxing</option>
         </Form.Select>
-        {touched && errors.packages ? (
+        {touched.packages && errors.packages ? (
           <small style={{ color: "red" }}>{errors.packages}</small>
         ) : (
           ""
@@ -128,7 +130,7 @@ export const RegistrationForm = ({
             value={values.password}
             onBlur={handleBlur}
           />
-          {touched && errors.password ? (
+          {touched.password && errors.password ? (
             <small style={{ color: "red" }}>{errors.password}</small>
           ) : (
             ""
@@ -157,7 +159,7 @@ export const RegistrationForm = ({
             value={values.confirmPassword}
             onBlur={handleBlur}
           />
-          {touched && errors.confirmPassword ? (
+          {touched.confirmPassword && errors.confirmPassword ? (
             <small style={{ color: "red" }}>{errors.confirmPassword}</small>
           ) : (
             ""

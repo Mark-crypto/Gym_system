@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./registration.css";
 import { UserNav } from "../components/UserNav";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import { FeedbackValidation } from "../Schemas/FeedbackValidation.js";
 import axios from "axios";
@@ -24,30 +24,42 @@ export const Feedback = () => {
       message: "",
     },
     validationSchema: FeedbackValidation,
-    onSubmit: (values) => {
-      const { name, email, number, message } = values;
-      if (!name || !email || !number || !message)
-        return toast.error("All fields are required");
-      const feedback = values;
-      try {
-        const submitFeedback = async () => {
-          const response = await axios.post("/feedback", { feedback });
-          console.log(response.data);
-        };
-        // submitFeedback()
-        toast.success("Form successfully submitted");
-        setFeedback("");
-      } catch (error) {
-        toast.error(error.response.data);
-      }
-    },
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, email, number, message } = formik.values;
+
+    if (!name || !email || !number || !message)
+      return toast.error("All fields are required");
+    if (
+      formik.errors.email ||
+      formik.errors.message ||
+      formik.errors.name ||
+      formik.errors.number
+    ) {
+      return toast.error("Fill the form correctly");
+    }
+    const feedback = { ...formik.values };
+    try {
+      const submitFeedback = async () => {
+        const response = await axios.post("/feedback", { feedback });
+        console.log(response.data);
+      };
+      // submitFeedback()
+      toast.success("Form successfully submitted");
+      setFeedback("");
+    } catch (error) {
+      toast.error(error.response.data);
+    }
+  };
 
   return (
     <>
+      <ToastContainer />
       <UserNav />
       <div>
-        <Form onSubmit={formik.handleSubmit} className="feedback-form">
+        <Form onSubmit={handleSubmit} className="feedback-form">
           <h4
             style={{
               textAlign: "center",
@@ -58,7 +70,7 @@ export const Feedback = () => {
           >
             Feedback Form
           </h4>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="name">Full Name</Form.Label>
             <Form.Control
               type="text"
@@ -69,13 +81,13 @@ export const Feedback = () => {
               value={formik.values.name}
               onBlur={formik.handleBlur}
             />
-            {formik.touched && formik.errors.name ? (
+            {formik.touched.name && formik.errors.name ? (
               <small style={{ color: "red" }}>{formik.errors.name}</small>
             ) : (
               ""
             )}
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="email">Email address</Form.Label>
             <Form.Control
               type="email"
@@ -86,17 +98,18 @@ export const Feedback = () => {
               value={formik.values.email}
               onBlur={formik.handleBlur}
             />
-            {formik.touched && formik.errors.email ? (
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>{" "}
+            <br />
+            {formik.touched.email && formik.errors.email ? (
               <small style={{ color: "red" }}>{formik.errors.email}</small>
             ) : (
               ""
             )}
-            <Form.Text className="text-muted">
-              We'll never share your email with anyone else.
-            </Form.Text>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="number">Phone Number</Form.Label>
             <Form.Control
               type="text"
@@ -107,13 +120,13 @@ export const Feedback = () => {
               value={formik.values.number}
               onBlur={formik.handleBlur}
             />
-            {formik.touched && formik.errors.number ? (
+            {formik.touched.number && formik.errors.number ? (
               <small style={{ color: "red" }}>{formik.errors.number}</small>
             ) : (
               ""
             )}
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="number">Message</Form.Label>
             <br />
             <textarea
@@ -128,7 +141,7 @@ export const Feedback = () => {
             />
             <br />
           </Form.Group>
-          {formik.touched && formik.errors.message ? (
+          {formik.touched.message && formik.errors.message ? (
             <small style={{ color: "red" }}>{formik.errors.message}</small>
           ) : (
             ""
