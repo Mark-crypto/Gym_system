@@ -1,11 +1,12 @@
 import { Router } from "express";
 
-import { login, logout, registration } from "../controllers/userController";
+import { login, logout, registration } from "../controllers/authController";
+import { verifyUser } from "../controllers/authController";
 
 const router = Router();
 
 //login
-router.post("/login", login);
+router.post("/login", verifyUser, login);
 //logout
 router.post("/logout", logout);
 //Generate OTP should be automatic

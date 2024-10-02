@@ -9,7 +9,7 @@ const router = Router();
 
 //User management
 //User profile
-router.get("/profile", profile);
+router.get("/profile/:username", profile);
 //Admin Feedback
 router.get("/admin-feedback", adminFeedback);
 //User feedback

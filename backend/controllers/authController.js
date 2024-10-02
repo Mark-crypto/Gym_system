@@ -7,39 +7,66 @@ import dotenv from "dotenv";
 dotenv.config();
 
 //Middleware for verifying user
+// export const verifyUser = async (req, res, next) => {
+//   const { verificationToken } = req.params;
+//   if (!verificationToken) {
+//     return res.status(400).json({ message: "Invalid token" });
+//   }
+//   const user = await User.findOne({
+//     verificationToken,
+//     verificationTokenExpiresAt: { $gt: Date.now() },
+//   });
+//   if (!user) {
+//     return res.status(400).json({ message: "Invalid token" });
+//   }
+//   user.isVerified = true;
+//   user.verificationToken = undefined;
+//   user.verificationTokenExpiresAt = undefined;
+//   await user.save();
+//   res.status(200).json({ message: "User verified successfully" });
+// };
+
 export const verifyUser = async (req, res, next) => {
-  const { verificationToken } = req.params;
-  if (!verificationToken) {
-    return res.status(400).json({ message: "Invalid token" });
+  try {
+    const { email } = req.method === "GET" ? req.query : req.body;
+    let exist = await User.findOne({ email });
+    if (!exist) {
+      return res.status(404).send({ errorMessage: "User not found" });
+    }
+    next();
+  } catch (error) {
+    return res.status(404).send({ errorMessage: "Authentication Error" });
   }
-  const user = await User.findOne({
-    verificationToken,
-    verificationTokenExpiresAt: { $gt: Date.now() },
-  });
-  if (!user) {
-    return res.status(400).json({ message: "Invalid token" });
-  }
-  user.isVerified = true;
-  user.verificationToken = undefined;
-  user.verificationTokenExpiresAt = undefined;
-  await user.save();
-  res.status(200).json({ message: "User verified successfully" });
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   //check if user exist
+  const userExist = await User.findOne({ email });
+  if (!userExist) {
+    return res.status(400).json({ message: "Invalid email" });
+  }
   //check if password is correct
+  const isPasswordCorrect = await bcrypt.compare(password, userExist.password);
+  if (!isPasswordCorrect) {
+    return res.status(400).json({ message: "Invalid password" });
+  }
   //generate token
-  let user;
   const token = await jwt.sign(
     {
-      userId: user._id,
-      email: user.email,
+      userId: userExist._id,
+      email: userExist.email,
     },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
   );
+  if (token) {
+    return res.status(200).send({
+      message: "Login successful",
+      token: token,
+      userName: userExist.fname,
+    });
+  }
   //set cookie
   res.send({ message: "Login successful" });
 };

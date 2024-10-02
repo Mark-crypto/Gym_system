@@ -19,9 +19,18 @@ export const memberFeedback = async (req, res) => {
 };
 
 export const profile = async (req, res) => {
+  const { username } = req.params;
   try {
-    const user = await User.findById(id);
-    res.json(user);
+    if (!username) {
+      res.send({ message: "Invalid username" });
+    }
+    const user = await User.findOne({ email: username });
+    if (!user)
+      return res.status(501).send({ message: "Could not find the user" });
+    //remove password and convert to object removing unnecessary mongoose data
+    //const newUser = {...user, password:""}
+    const { password, ...rest } = Object.assign({}, user.toJSON());
+    res.status(201).send(rest);
   } catch (error) {
     res.send({ message: "Internal server error" });
   }

@@ -20,8 +20,15 @@ export const createUser = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate();
-    res.send({ message: "Record successfully inserted" });
+    const id = req.query.id;
+    if (id) {
+      const body = req.body;
+      const user = await User.updateOne({ _id: id }, body);
+      if (user)
+        return res.status(201).send({ message: "Record updated successfully" });
+    } else {
+      return res.status(401).send({ error: "User not found" });
+    }
   } catch (error) {
     res.send({ message: "Internal server error" });
   }
