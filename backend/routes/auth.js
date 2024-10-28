@@ -1,7 +1,17 @@
 import { Router } from "express";
 
-import { login, logout, registration } from "../controllers/authController";
+import {
+  login,
+  logout,
+  registration,
+  generateOTP,
+  verifyOTP,
+  resetPassword,
+  authenticate,
+} from "../controllers/authController";
+import { sendEmail } from "../controllers/emailController";
 import { verifyUser } from "../controllers/authController";
+import { localVariables } from "../middlewares/authMiddleware";
 
 const router = Router();
 
@@ -10,17 +20,17 @@ router.post("/login", verifyUser, login);
 //logout
 router.post("/logout", logout);
 //Generate OTP should be automatic
-router.get("/generateOTP", generateOTP);
+router.get("/generateOTP", verifyUser, localVariables, generateOTP);
 //Verify OTP
-router.get("/verifyOTP", verifyOTP);
+router.get("/verifyOTP", verifyUser, verifyOTP);
 //Forgot Password
 router.get("/forgotPassword", forgotPassword);
 //Reset Password
-router.get("/resetPassword", resetPassword);
+router.put("/resetPassword", verifyUser, resetPassword);
 //Register mail
-router.post("/registerMail", registerMail);
+router.post("/registerMail", sendEmail);
 //Authenticate
-router.post("/authenticate", authenticate);
+router.post("/authenticate", verifyUser, authenticate);
 //Registration
 router.post("/registration", registration);
 

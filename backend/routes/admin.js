@@ -5,6 +5,7 @@ import {
   deleteUser,
   getUsers,
 } from "../controllers/dashboardController";
+import { auth } from "../controllers/authController";
 
 const router = Router();
 

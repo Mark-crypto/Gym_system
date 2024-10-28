@@ -20,10 +20,11 @@ export const createUser = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
   try {
-    const id = req.query.id;
-    if (id) {
+    const { userId } = req.user; //could be otherwise
+    //const id = req.query.id;
+    if (userId) {
       const body = req.body;
-      const user = await User.updateOne({ _id: id }, body);
+      const user = await User.updateOne({ _id: userId }, body);
       if (user)
         return res.status(201).send({ message: "Record updated successfully" });
     } else {

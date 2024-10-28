@@ -3,6 +3,7 @@ import User from "../model/user.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
 import jwt from "jsonwebtoken";
+import otpGenerator from "otp-generator";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -25,6 +26,78 @@ dotenv.config();
 //   await user.save();
 //   res.status(200).json({ message: "User verified successfully" });
 // };
+
+//authenticate
+export const authenticate = (req, res) => {
+  res.end();
+};
+export const generateOTP = async (req, res) => {
+  req.app.locals.OTP = otpGenerator.generate(6, {
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
+  res.status(201).send({ code: req.app.locals.OTP });
+};
+export const verifyOTP = (req, res, next) => {
+  const { code } = req.query;
+  if (parseInt(req.app.locals.OTP) === parseInt(code)) {
+    req.app.locals.OTP = null;
+    req.app.locals.resetSession = true;
+    return res.status(200).send({ message: "Verified successfully" });
+  }
+  return res.status(400).send({ error: "Invalid OTP" });
+};
+//successfully redirect user when OTP is valid
+export const createResetSession = (req, res) => {
+  if (req.app.locals.resetSession) {
+    req.app.locals.resetSession = false; //allow access to route once
+    return res.status(201).send({ message: "Access granted" });
+  }
+  return res.status(440).send({ error: "Session expired" });
+};
+//reset or update user password
+export const resetPassword = async (req, res) => {
+  try {
+    if (req.app.locals.resetSession)
+      return res.status(440).send({ error: "Session expired" });
+    const { email, password } = req.body;
+    try {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(500).send({ message: "user not found" });
+      const hashedPassword = await bcrypt.hash(password, 10);
+      if (!hashedPassword)
+        return res
+          .status(500)
+          .send({ message: "Password could not be hashed" });
+      const updatedPassword = await User.updateOne(
+        { email: user.email },
+        { password: hashedPassword }
+      );
+      if (updatedPassword)
+        return res
+          .status(201)
+          .send({ message: "Password updated successfully" });
+      req.app.locals.resetSession = false;
+    } catch (error) {
+      return res.status(500).send({ error });
+    }
+  } catch (error) {
+    return res.status(401).send({ error });
+  }
+};
+export const auth = async (req, res, next) => {
+  try {
+    //access authorize header to validate request
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    req.user(decoded);
+    next();
+    // res.json(decoded);
+  } catch (error) {
+    return res.status(401).send({ error: "Authentication failed" });
+  }
+};
 
 export const verifyUser = async (req, res, next) => {
   try {
