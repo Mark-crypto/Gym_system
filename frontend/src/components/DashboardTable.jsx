@@ -2,7 +2,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import Table from "react-bootstrap/Table";
 import { DeleteModal } from "./DeleteModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditModal } from "./EditModal";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,20 +12,28 @@ export const DashboardTable = () => {
   //const { isLoading, isError } = useFetch(url);
   const [del, setDel] = useState(false);
   const [show, setShow] = useState(false);
-  const [edit, setEdit] = useState([]); //should not be empty
+  const [edit, setEdit] = useState([]);
+  const [members, setMembers] = useState([]);
 
-  const handleShow = () => {
+  //Fetch all data
+  useEffect(() => {
+    const fetchData = async () => {
+      const resp = await axios("http://localhost:5000/dashboard");
+      console.log(resp.data);
+      setMembers(resp.data);
+    };
+    fetchData();
+  }, []); //edit, add, delete
+
+  // Fetch single user for edit and display on modal
+  const handleShow = (id) => {
+    const fetchData = async () => {
+      const resp = await axios(`http://localhost:5000/dashboard/${id}`);
+      console.log(resp.data);
+      setEdit(resp.data);
+    };
+    fetchData();
     setShow(true);
-    try {
-      const fetchData = async () => {
-        const res = await axios("/dashboard");
-        console.log(res.data);
-        setEdit(res.data);
-      };
-      //fetchData();
-    } catch (error) {
-      toast.error(error.response.data);
-    }
   };
   const handleClose = () => setShow(false);
   const handleShowDel = () => setDel(true);
@@ -38,7 +46,9 @@ export const DashboardTable = () => {
     if (del) {
       try {
         const deleteData = async () => {
-          const response = await axios.delete("/delete");
+          const response = await axios.delete(
+            "http://localhost:5000/dashboard"
+          );
           if (response.status === 200) {
             console.log("deleted");
           }
@@ -86,30 +96,58 @@ export const DashboardTable = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {members.map((member, index) => {
+            return (
+              <tr key={member.id}>
+                <td style={{ color: "black", fontWeight: "bold" }}>
+                  {index + 1}
+                </td>
+                <td style={{ color: "red", fontWeight: "bold" }}>
+                  {member.fname}
+                </td>
+                <td style={{ color: "red", fontWeight: "bold" }}>
+                  {member.lname}
+                </td>
+                <td style={{ color: "blue", fontWeight: "bold" }}>
+                  {member.email}
+                </td>
+                <td style={{ color: "orange", fontWeight: "bold" }}>
+                  {member.number}
+                </td>
+                <td style={{ color: "green", fontWeight: "bold" }}>
+                  {member.status}
+                </td>
+                <td style={{ color: "green", fontWeight: "bold" }}>
+                  {member.packages}
+                </td>
+                <td>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleShow(member._id)}
+                    style={{ width: "50px" }}
+                  >
+                    <FaRegEdit />
+                  </button>
+                  &nbsp;
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleShowDel(member._id)}
+                    style={{ width: "50px" }}
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+          {/* <tr>
             <td style={{ color: "black", fontWeight: "bold" }}>1</td>
-            <td style={{ color: "red", fontWeight: "bold" }}>
-              {/* {data.fname || "Mark"} */}
-              Mark
-            </td>
-            <td style={{ color: "red", fontWeight: "bold" }}>
-              {/* {data.lname || "Otto"} */}
-              Otto
-            </td>
-            <td style={{ color: "blue", fontWeight: "bold" }}>
-              {/* {data.email || "test@test.com"} */}
-              test@test.com
-            </td>
-            <td style={{ color: "orange", fontWeight: "bold" }}>
-              {/* {data.number || "0712345678"} */}
-              0712345678
-            </td>
+            <td style={{ color: "red", fontWeight: "bold" }}>Mark</td>
+            <td style={{ color: "red", fontWeight: "bold" }}>Otto</td>
+            <td style={{ color: "blue", fontWeight: "bold" }}>test@test.com</td>
+            <td style={{ color: "orange", fontWeight: "bold" }}>0712345678</td>
+            <td style={{ color: "green", fontWeight: "bold" }}>active</td>
             <td style={{ color: "green", fontWeight: "bold" }}>
-              {/* {data.status || "active"} */}
-              active
-            </td>
-            <td style={{ color: "green", fontWeight: "bold" }}>
-              {/* {data.package || "Weight lifting"} */}
               weight lifting
             </td>
             <td>
@@ -129,7 +167,7 @@ export const DashboardTable = () => {
                 <RiDeleteBin6Line />
               </button>
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </Table>
       <DeleteModal

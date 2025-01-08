@@ -8,10 +8,10 @@ import {
   verifyOTP,
   resetPassword,
   authenticate,
-} from "../controllers/authController";
-import { sendEmail } from "../controllers/emailController";
-import { verifyUser } from "../controllers/authController";
-import { localVariables } from "../middlewares/authMiddleware";
+} from "../controllers/authController.js";
+import { sendEmail } from "../controllers/emailController.js";
+import { verifyUser } from "../controllers/authController.js";
+import { localVariables } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -24,7 +24,7 @@ router.get("/generateOTP", verifyUser, localVariables, generateOTP);
 //Verify OTP
 router.get("/verifyOTP", verifyUser, verifyOTP);
 //Forgot Password
-router.get("/forgotPassword", forgotPassword);
+// router.get("/forgotPassword", forgotPassword);
 //Reset Password
 router.put("/resetPassword", verifyUser, resetPassword);
 //Register mail

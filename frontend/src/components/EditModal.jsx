@@ -9,24 +9,27 @@ import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
 export const EditModal = ({ show, handleClose, edit, setShow }) => {
   //more imports
-  const [registration, setRegistration] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    number: "",
-    packages: "",
-  });
-
+  const [data, setData] = useState(edit);
+  // const [registration, setRegistration] = useState({
+  //   fname: "",
+  //   lname: "",
+  //   email: "",
+  //   number: "",
+  //   packages: "",
+  // });
+  const initialValues = {
+    fname: "Diogo",
+    lname: "Jota",
+    email: "djota@gmail.com",
+    number: 1237586,
+    packages: "weightLifting",
+  };
   const formik = useFormik({
-    initialValues: {
-      fname: "",
-      lname: "",
-      email: "",
-      number: "",
-      packages: "",
-    },
+    initialValues,
     validationSchema: RegisterValidation,
   });
+  console.log(formik.values);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { fname, lname, email, number, packages } = formik.values;
@@ -44,12 +47,15 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
     const data = { ...formik.values };
     try {
       const editData = async () => {
-        const response = await axios.put("/edit", data);
+        const response = await axios.put(
+          "http://localhost:5000/dashboard",
+          data
+        );
         if (response.status === 200) {
           console.log("edited");
         }
       };
-      //editData();
+      editData();
       setShow(false);
     } catch (error) {
       toast.error(error.response.data);
@@ -69,7 +75,6 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               <Form.Label htmlFor="fname">First Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter first name"
                 name="fname"
                 id="fname"
                 onChange={formik.handleChange}
@@ -86,7 +91,6 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               <Form.Label htmlFor="lname">Last Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter last name"
                 name="lname"
                 id="lname"
                 onChange={formik.handleChange}
@@ -104,7 +108,6 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               <Form.Label htmlFor="email">Email address</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter email"
                 name="email"
                 id="email"
                 onChange={formik.handleChange}
@@ -122,7 +125,6 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
               <Form.Label htmlFor="number">Phone Number</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter phone number"
                 name="number"
                 id="number"
                 onChange={formik.handleChange}

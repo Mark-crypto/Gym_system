@@ -1,4 +1,4 @@
-import User from "../model/user";
+import User from "../model/user.js";
 
 export const createUser = async (req, res) => {
   const { fname, lname, photo, email, number, packages, password } = req.body;
@@ -19,12 +19,13 @@ export const createUser = async (req, res) => {
   }
 };
 export const updateUser = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { userId } = req.user; //could be otherwise
+    // const { userId } = req.user;
     //const id = req.query.id;
-    if (userId) {
+    if (id) {
       const body = req.body;
-      const user = await User.updateOne({ _id: userId }, body);
+      const user = await User.updateOne({ _id: id }, body);
       if (user)
         return res.status(201).send({ message: "Record updated successfully" });
     } else {
@@ -36,8 +37,9 @@ export const updateUser = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
+  const { id } = req.params;
   try {
-    const deletedUser = await User.findByIdAndDelete();
+    const deletedUser = await User.findByIdAndDelete({ _id: id });
     if (deletedUser) return res.send({ message: "User deleted successfully" });
     else return res.status(404).send({ message: "user not found" });
   } catch (error) {
@@ -48,6 +50,16 @@ export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.send({ message: "Server error occurred" });
+  }
+};
+export const getSingleUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    res.json(user);
   } catch (error) {
     console.log(error);
     res.send({ message: "Server error occurred" });

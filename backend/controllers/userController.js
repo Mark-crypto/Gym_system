@@ -1,5 +1,5 @@
-import Feedback from "../model/feedback";
-import User from "../model/user";
+import Feedback from "../model/feedback.js";
+import User from "../model/user.js";
 
 export const memberFeedback = async (req, res) => {
   const { name, email, number, message } = req.body;

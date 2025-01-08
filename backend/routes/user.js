@@ -3,7 +3,7 @@ import {
   memberFeedback,
   profile,
   adminFeedback,
-} from "../controllers/userController";
+} from "../controllers/userController.js";
 
 const router = Router();
 
