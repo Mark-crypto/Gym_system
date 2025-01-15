@@ -98,7 +98,7 @@ export const DashboardTable = () => {
         <tbody>
           {members.map((member, index) => {
             return (
-              <tr key={member.id}>
+              <tr key={member._id}>
                 <td style={{ color: "black", fontWeight: "bold" }}>
                   {index + 1}
                 </td>

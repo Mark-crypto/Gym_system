@@ -70,13 +70,15 @@ export const AddModal = ({ add, setAdd }) => {
         const formData = await axios.post("/registration", {
           registrationData,
         });
-        console.log(formData);
+        if (formData.status !== 201) {
+          toast.error("Error adding user");
+        }
       } catch (error) {
         toast.error(error.response.data);
       }
     };
-    console.log(registrationData);
-    //submitForm();
+    // console.log(registrationData);
+    submitForm();
     setAdd(false);
     toast.success("User added successfully");
     setRegistration("");

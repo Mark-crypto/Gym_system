@@ -2,7 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../Schemas/RegisterValidation.js";
@@ -10,6 +10,7 @@ import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 export const EditModal = ({ show, handleClose, edit, setShow }) => {
   //more imports
   const [data, setData] = useState(edit);
+
   // const [registration, setRegistration] = useState({
   //   fname: "",
   //   lname: "",
@@ -18,11 +19,11 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
   //   packages: "",
   // });
   const initialValues = {
-    fname: "Diogo",
-    lname: "Jota",
-    email: "djota@gmail.com",
-    number: 1237586,
-    packages: "weightLifting",
+    fname: data.fname,
+    lname: data.lname,
+    email: data.email,
+    number: data.number,
+    packages: data.packages,
   };
   const formik = useFormik({
     initialValues,
@@ -65,110 +66,114 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="fname">First Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="fname"
-                id="fname"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.fname}
-              />
-              {formik.touched.fname && formik.errors.fname ? (
-                <small style={{ color: "red" }}>{formik.errors.fname}</small>
-              ) : (
-                ""
-              )}
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="lname">Last Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="lname"
-                id="lname"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.lname}
-              />
-              {formik.touched.lname && formik.errors.lname ? (
-                <small style={{ color: "red" }}>{formik.errors.lname}</small>
-              ) : (
-                ""
-              )}
-            </Form.Group>
+      {data ? (
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Update Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="fname">First Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="fname"
+                  id="fname"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.fname}
+                />
+                {formik.touched.fname && formik.errors.fname ? (
+                  <small style={{ color: "red" }}>{formik.errors.fname}</small>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="lname">Last Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="lname"
+                  id="lname"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.lname}
+                />
+                {formik.touched.lname && formik.errors.lname ? (
+                  <small style={{ color: "red" }}>{formik.errors.lname}</small>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="email">Email address</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                id="email"
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="email">Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  id="email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
+                />
+                {formik.touched.email && formik.errors.email ? (
+                  <small style={{ color: "red" }}>{formik.errors.email}</small>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="number">Phone Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="number"
+                  id="number"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.number}
+                />
+                {formik.touched.number && formik.errors.number ? (
+                  <small style={{ color: "red" }}>{formik.errors.number}</small>
+                ) : (
+                  ""
+                )}
+              </Form.Group>
+              <Form.Label htmlFor="packages">Select Package:</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                name="packages"
+                value={formik.values.packages}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.email}
-              />
-              {formik.touched.email && formik.errors.email ? (
-                <small style={{ color: "red" }}>{formik.errors.email}</small>
+                id="packages"
+              >
+                <option style={{ fontWeight: "bold" }}>Choose option</option>
+                <option value="weightLifting">Weight Lifting</option>
+                <option value="aerobics">Aerobics</option>
+                <option value="zumba">Zumba</option>
+                <option value="karate">Karate</option>
+                <option value="boxing">Boxing</option>
+              </Form.Select>
+              {formik.touched.packages && formik.errors.packages ? (
+                <small style={{ color: "red" }}>{formik.errors.packages}</small>
               ) : (
                 ""
               )}
-            </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="number">Phone Number</Form.Label>
-              <Form.Control
-                type="text"
-                name="number"
-                id="number"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.number}
-              />
-              {formik.touched.number && formik.errors.number ? (
-                <small style={{ color: "red" }}>{formik.errors.number}</small>
-              ) : (
-                ""
-              )}
-            </Form.Group>
-            <Form.Label htmlFor="packages">Select Package:</Form.Label>
-            <Form.Select
-              aria-label="Default select example"
-              name="packages"
-              value={formik.values.packages}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              id="packages"
-            >
-              <option style={{ fontWeight: "bold" }}>Choose option</option>
-              <option value="weightLifting">Weight Lifting</option>
-              <option value="aerobics">Aerobics</option>
-              <option value="zumba">Zumba</option>
-              <option value="karate">Karate</option>
-              <option value="boxing">Boxing</option>
-            </Form.Select>
-            {formik.touched.packages && formik.errors.packages ? (
-              <small style={{ color: "red" }}>{formik.errors.packages}</small>
-            ) : (
-              ""
-            )}
-
-            <Button
-              type="submit"
-              className="btn btn-primary"
-              style={{ marginTop: "20px", width: "100%" }}
-            >
-              <b> Edit</b>
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+              <Button
+                type="submit"
+                className="btn btn-primary"
+                style={{ marginTop: "20px", width: "100%" }}
+              >
+                <b> Edit</b>
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      ) : (
+        <h4>Loading...</h4>
+      )}
     </>
   );
 };
