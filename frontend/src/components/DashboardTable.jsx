@@ -29,11 +29,11 @@ export const DashboardTable = () => {
   const handleShow = (id) => {
     const fetchData = async () => {
       const resp = await axios(`http://localhost:5000/dashboard/${id}`);
-      console.log(resp.data);
+      //console.log(resp.data);
       setEdit(resp.data);
     };
-    fetchData();
     setShow(true);
+    fetchData();
   };
   const handleClose = () => setShow(false);
   const handleShowDel = () => setDel(true);

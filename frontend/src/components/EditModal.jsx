@@ -9,27 +9,18 @@ import { RegisterValidation } from "../Schemas/RegisterValidation.js";
 
 export const EditModal = ({ show, handleClose, edit, setShow }) => {
   //more imports
-  const [data, setData] = useState(edit);
 
-  // const [registration, setRegistration] = useState({
-  //   fname: "",
-  //   lname: "",
-  //   email: "",
-  //   number: "",
-  //   packages: "",
-  // });
-  const initialValues = {
-    fname: data.fname,
-    lname: data.lname,
-    email: data.email,
-    number: data.number,
-    packages: data.packages,
-  };
   const formik = useFormik({
-    initialValues,
+    initialValues: {
+      fname: edit?.fname || "",
+      lname: edit?.lname || "",
+      email: edit?.email || "",
+      number: edit?.number || "",
+      packages: edit?.packages || "Choose option",
+    },
+    enableReinitialize: true,
     validationSchema: RegisterValidation,
   });
-  console.log(formik.values);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,7 +57,7 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
 
   return (
     <>
-      {data ? (
+      {
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Update Details</Modal.Title>
@@ -171,9 +162,7 @@ export const EditModal = ({ show, handleClose, edit, setShow }) => {
             </Form>
           </Modal.Body>
         </Modal>
-      ) : (
-        <h4>Loading...</h4>
-      )}
+      }
     </>
   );
 };
