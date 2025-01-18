@@ -61,7 +61,7 @@ export const AddModal = ({ add, setAdd }) => {
     const registrationData = {
       ...formik.values,
       password: hashedPassword,
-      confirmPassword: "",
+      confirmPassword: null,
     };
 
     //change to use axios for better error handling
@@ -74,14 +74,13 @@ export const AddModal = ({ add, setAdd }) => {
           toast.error("Error adding user");
         }
       } catch (error) {
-        toast.error(error.response.data);
+        toast.error(error.response);
       }
     };
     // console.log(registrationData);
     submitForm();
     setAdd(false);
     toast.success("User added successfully");
-    setRegistration("");
   };
 
   return (
@@ -128,7 +127,7 @@ export const AddModal = ({ add, setAdd }) => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="photo">
-                Profile photo <span style={{ color: "red" }}>(optional)</span>
+                Profile photo <span style={{ color: "gray" }}>(optional)</span>
               </Form.Label>
               <Form.Control
                 type="file"
