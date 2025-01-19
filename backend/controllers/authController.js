@@ -161,11 +161,12 @@ export const registration = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = generateVerificationToken();
     const newUser = new User({
-      first_name: fname,
-      last_name: lname,
+      fname,
+      lname,
       email,
+      number,
       password: hashedPassword,
-      profilePhoto: photo,
+      photo,
       packages,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 6 * 60 * 60 * 1000, //6 days

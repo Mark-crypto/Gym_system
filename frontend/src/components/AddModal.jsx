@@ -34,7 +34,7 @@ export const AddModal = ({ add, setAdd }) => {
       number,
       packages,
       confirmPassword,
-      image,
+      photo,
       password,
     } = formik.values;
 
