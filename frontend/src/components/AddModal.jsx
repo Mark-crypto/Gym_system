@@ -62,14 +62,18 @@ export const AddModal = ({ add, setAdd }) => {
       ...formik.values,
       password: hashedPassword,
       confirmPassword: null,
+      packages: formik.values.packages,
     };
 
     //change to use axios for better error handling
     const submitForm = async () => {
       try {
-        const formData = await axios.post("/registration", {
-          registrationData,
-        });
+        const formData = await axios.post(
+          "http://localhost:5000/registration",
+          {
+            ...registrationData,
+          }
+        );
         if (formData.status !== 201) {
           toast.error("Error adding user");
         }
