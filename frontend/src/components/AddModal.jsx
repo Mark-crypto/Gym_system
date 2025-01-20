@@ -71,7 +71,7 @@ export const AddModal = ({ add, setAdd }) => {
         const formData = await axios.post(
           "http://localhost:5000/registration",
           {
-            ...registrationData,
+            registrationData,
           }
         );
         if (formData.status !== 201) {
