@@ -150,7 +150,7 @@ export const logout = (req, res) => {
 
 export const registration = async (req, res) => {
   const { fname, lname, email, number, photo, password, packages } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     if (!fname || !lname || !email || !number || !password || !packages) {
       return res.status(400).json({ message: "All fields are required" });

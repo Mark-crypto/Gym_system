@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { RegisterValidation } from "../Schemas/RegisterValidation.js";
+import axios from "axios";
 
 export const AddModal = ({ add, setAdd }) => {
   const formik = useFormik({
@@ -19,6 +20,7 @@ export const AddModal = ({ add, setAdd }) => {
       confirmPassword: "",
     },
     validationSchema: RegisterValidation,
+    enableReinitialize: true,
   });
   //Close our modal
   const handleHide = () => setAdd(false);
@@ -62,7 +64,6 @@ export const AddModal = ({ add, setAdd }) => {
       ...formik.values,
       password: hashedPassword,
       confirmPassword: null,
-      packages: formik.values.packages,
     };
 
     //change to use axios for better error handling
@@ -71,7 +72,7 @@ export const AddModal = ({ add, setAdd }) => {
         const formData = await axios.post(
           "http://localhost:5000/registration",
           {
-            registrationData,
+            ...registrationData,
           }
         );
         if (formData.status !== 201) {
