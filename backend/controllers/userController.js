@@ -14,7 +14,7 @@ export const memberFeedback = async (req, res) => {
     res.send({ message: "Entry inserted successfully" });
   } catch (error) {
     console.log(error);
-    res.send({ message: "An error occured. Please try again" });
+    res.send({ message: "An error occurred. Please try again" });
   }
 };
 
@@ -39,6 +39,7 @@ export const profile = async (req, res) => {
 export const adminFeedback = async (req, res) => {
   try {
     const feedback = await Feedback.find();
+    //console.log(feedback);
     res.json(feedback);
   } catch (error) {
     res.status(500).send({ message: "Internal server error" });

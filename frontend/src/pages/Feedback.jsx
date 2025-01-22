@@ -9,13 +9,6 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 export const Feedback = () => {
-  const [feedback, setFeedback] = useState({
-    name: "",
-    email: "",
-    number: "",
-    message: "",
-  });
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -40,15 +33,17 @@ export const Feedback = () => {
     ) {
       return toast.error("Fill the form correctly");
     }
-    const feedback = { ...formik.values };
+
     try {
       const submitFeedback = async () => {
-        const response = await axios.post("/feedback", { feedback });
+        const response = await axios.post("http://localhost:5000/feedback", {
+          ...formik.values,
+        });
         console.log(response.data);
       };
-      // submitFeedback()
+      submitFeedback();
       toast.success("Form successfully submitted");
-      setFeedback("");
+      formik.resetForm();
     } catch (error) {
       toast.error(error.response.data);
     }

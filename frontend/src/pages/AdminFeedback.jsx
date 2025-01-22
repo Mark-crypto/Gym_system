@@ -9,16 +9,16 @@ export const AdminFeedback = () => {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const response = await axios("/feedback");
+        const response = await axios("http://localhost:5000/admin-feedback");
         setFeedbacks(response.data);
-        console.log(response.data);
       };
-      //fetchData();
+      fetchData();
       //toast.success("It works perfectly");
     } catch (error) {
       toast.error(error.response.data);
     }
   }, []);
+
   return (
     <>
       <ToastContainer />
@@ -26,7 +26,7 @@ export const AdminFeedback = () => {
       <Table hover>
         <thead>
           <tr>
-            <th style={{ fontWeight: "bold" }}>#</th>
+            <th style={{ fontWeight: "bold" }}></th>
             <th style={{ fontWeight: "bold" }}>Full Name</th>
             <th style={{ fontWeight: "bold" }}>Email</th>
             <th style={{ fontWeight: "bold" }}>Number</th>
@@ -34,20 +34,27 @@ export const AdminFeedback = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td style={{ color: "black", fontWeight: "bold" }}>1</td>
-            <td style={{ color: "red", fontWeight: "bold" }}>Mark Juma</td>
-            <td style={{ color: "green", fontWeight: "bold" }}>
-              test@test.com
-            </td>
-            <td style={{ color: "blue", fontWeight: "bold" }}>0712345678</td>
-            <td style={{ color: "black", fontWeight: "bold" }}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
-              dicta excepturi autem repellendus deserunt quisquam eveniet, minus
-              magnam neque id cumque vero delectus earum ipsum provident
-              expedita iusto odio? Ipsum.
-            </td>
-          </tr>
+          {feedbacks.map((feedback, index) => {
+            return (
+              <tr key={feedback._id}>
+                <td style={{ color: "black", fontWeight: "bold" }}>
+                  {index + 1}
+                </td>
+                <td style={{ color: "red", fontWeight: "bold" }}>
+                  {feedback.name}
+                </td>
+                <td style={{ color: "green", fontWeight: "bold" }}>
+                  {feedback.email}
+                </td>
+                <td style={{ color: "blue", fontWeight: "bold" }}>
+                  {feedback.number}
+                </td>
+                <td style={{ color: "black", fontWeight: "bold" }}>
+                  {feedback.message}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </>
