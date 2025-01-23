@@ -19,7 +19,8 @@ export const Profile = () => {
   useEffect(() => {
     try {
       const fetchProfile = async () => {
-        const response = await axios("/profile");
+        const response = await axios(`http://localhost:5000/profile/:${id}`);
+
         console.log(response.data);
         setProfile(response.data);
         setIsLoading(false);
