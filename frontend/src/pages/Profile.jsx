@@ -19,14 +19,16 @@ export const Profile = () => {
   useEffect(() => {
     try {
       const fetchProfile = async () => {
-        const response = await axios(`http://localhost:5000/profile/:${id}`);
+        const response = await axios(
+          `http://localhost:5000/profile/test@test.com`
+        );
 
         console.log(response.data);
         setProfile(response.data);
         setIsLoading(false);
       };
-      //fetchProfile()
-      console.log("Form submitted");
+      fetchProfile();
+      //console.log("Form submitted");
     } catch (error) {
       console.log(error.response.status);
       setIsError(true);
@@ -41,17 +43,19 @@ export const Profile = () => {
         <div className="profile-top">
           <img src={defaultProfile} alt="profile" style={{ width: "200px" }} />
           <div className="details">
-            <p>Full Name:</p>
-            <p>Email Address:</p>
+            <p>
+              Full Name: {profile.fname} {profile.lname}
+            </p>
+            <p>Email Address:{profile.email}</p>
           </div>
         </div>
         <div className="profile-bottom">
           <h4 style={{ color: "blue", textDecoration: "underline" }}>
             User Details
           </h4>
-          <p>End of subscription: </p>
-          <p>Subscription Type: </p>
-          <p>Subscription Status: </p>
+          <p>End of subscription: 12/12/25</p>
+          <p>Subscription Type: {profile.packages} </p>
+          <p>Subscription Status: {profile.status}</p>
         </div>
       </div>
     </>
