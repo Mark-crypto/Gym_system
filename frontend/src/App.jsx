@@ -8,6 +8,7 @@ import { Registration } from "./pages/Registration";
 import { Reports } from "./pages/Reports";
 import { ErrorBoundary } from "./pages/ErrorBoundary";
 import { AdminFeedback } from "./pages/AdminFeedback";
+import Payment from "./pages/Payment";
 
 // import { Loading } from "./components/Loading";
 import "react-toastify/dist/ReactToastify.css";
@@ -46,6 +47,11 @@ export const router = createBrowserRouter([
   {
     path: "/reports",
     element: <Reports />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
     errorElement: <ErrorBoundary />,
   },
   {

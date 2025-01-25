@@ -19,7 +19,7 @@ export const UserNav = () => {
             <Nav className="me-auto">
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/feedback">Feedback</Nav.Link>
-              <Nav.Link href="#">Payment</Nav.Link>
+              <Nav.Link href="/payment">Payment</Nav.Link>
               <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>
