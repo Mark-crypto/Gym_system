@@ -4,6 +4,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import PaymentValidation from "../Schemas/PaymentValidation";
+import { UserNav } from "../components/UserNav";
 
 const Payment = () => {
   const formik = useFormik({
@@ -11,10 +12,32 @@ const Payment = () => {
       name: "",
       email: "",
       number: "",
-      message: "",
+      amount: "",
+      packages: "",
+      period: "",
     },
     validationSchema: PaymentValidation,
   });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    try {
+      const submitForm = async () => {
+        const response = await axios.post(
+          "http://localhost:5000/payment",
+          formik.values
+        );
+        if (response.status === 200) {
+          toast.success("Payment submitted successfully");
+        } else {
+          toast.error("Failed to submit");
+        }
+      };
+    } catch (error) {
+      toast.error("Failed to submit");
+    }
+    //submitForm();
+    console.log("submitted");
+  };
   return (
     <>
       <ToastContainer />
@@ -29,7 +52,7 @@ const Payment = () => {
               textTransform: "uppercase",
             }}
           >
-            Feedback Form
+            Payment Form
           </h4>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="name">Full Name</Form.Label>
@@ -88,26 +111,67 @@ const Payment = () => {
             )}
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="number">Message</Form.Label>
-            <br />
-            <textarea
-              name="message"
-              id="message"
-              cols="30"
-              rows="10"
+            <Form.Label htmlFor="number">Amount</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Amount"
+              name="amount"
+              id="amount"
               onChange={formik.handleChange}
-              className="message"
-              value={formik.values.message}
+              value={formik.values.amount}
               onBlur={formik.handleBlur}
             />
-            <br />
+            {formik.touched.amount && formik.errors.amount ? (
+              <small style={{ color: "red" }}>{formik.errors.amount}</small>
+            ) : (
+              ""
+            )}
           </Form.Group>
-          {formik.touched.message && formik.errors.message ? (
-            <small style={{ color: "red" }}>{formik.errors.message}</small>
+          <Form.Label htmlFor="packages">Select Package:</Form.Label>
+          <Form.Select
+            aria-label="Default select example"
+            name="packages"
+            value={formik.values.packages}
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            id="packages"
+          >
+            <option style={{ fontWeight: "bold" }}>Choose an option</option>
+            <option value="weightLifting">Weight Lifting</option>
+            <option value="aerobics">Aerobics</option>
+            <option value="zumba">Zumba</option>
+            <option value="karate">Karate</option>
+            <option value="boxing">Boxing</option>
+          </Form.Select>
+          {formik.touched.packages && formik.errors.packages ? (
+            <small style={{ color: "red", display: "flex" }}>
+              {formik.errors.packages}
+            </small>
           ) : (
             ""
           )}
-          <Button variant="primary" type="submit" className="feedback-btn">
+          <Form.Label htmlFor="period" className="mt-3">
+            Subscription Period:
+          </Form.Label>
+          <Form.Select
+            aria-label="Default select example"
+            name="period"
+            value={formik.values.period}
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            id="period"
+          >
+            <option style={{ fontWeight: "bold" }}>Choose an option</option>
+            <option value="daily">Daily</option>
+            <option value="monthly">Monthly</option>
+            <option value="annually">Annually</option>
+          </Form.Select>
+          {formik.touched.period && formik.errors.period ? (
+            <small style={{ color: "red" }}>{formik.errors.period}</small>
+          ) : (
+            ""
+          )}
+          <Button variant="primary" type="submit" className="mt-3 feedback-btn">
             Submit
           </Button>
         </Form>
