@@ -18,8 +18,7 @@ const Payment = () => {
     },
     validationSchema: PaymentValidation,
   });
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     try {
       const submitForm = async () => {
         const response = await axios.post(
@@ -27,16 +26,15 @@ const Payment = () => {
           formik.values
         );
         if (response.status === 200) {
-          toast.success("Payment submitted successfully");
+          toast.success(response.data.message);
         } else {
           toast.error("Failed to submit");
         }
       };
+      submitForm();
     } catch (error) {
       toast.error("Failed to submit");
     }
-    //submitForm();
-    console.log("submitted");
   };
   return (
     <>
